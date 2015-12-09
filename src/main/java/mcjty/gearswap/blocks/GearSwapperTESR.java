@@ -121,14 +121,11 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
         GL11.glTranslatef(-0.5F, 0.5F, 0.04F);
         GL11.glScalef(f3 * factor, -f3 * factor, 0.0001f);
 
-//        FontRenderer fontRenderer = this.getFontRenderer();
-//        TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
         RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
         for (int i = 0 ; i < 4 ; i++) {
             ItemStack stack = gearSwapperTE.getStackInSlot(i);
             if (stack != null) {
-//                itemRender.renderItemAndEffectIntoGUI(fontRenderer, textureManager, stack, xx[i], yy[i]);
                 itemRender.renderItemAndEffectIntoGUI(stack, xx[i], yy[i]);
             }
         }

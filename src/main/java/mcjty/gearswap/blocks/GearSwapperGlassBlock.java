@@ -10,8 +10,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GearSwapperGlassBlock extends GearSwapperBlock {
-    public GearSwapperGlassBlock(Material material, String textureName, String blockName) {
-        super(material, textureName, blockName);
+    public GearSwapperGlassBlock(Material material, String blockName) {
+        super(material, blockName);
     }
 
 //

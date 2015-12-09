@@ -27,32 +27,36 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GearSwapperBlock extends Block implements ITileEntityProvider {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final String MIMIC_PREFIX = "GearSwapper:mimic_";
 
-    //    private IIcon iconSide;
-    private String textureName;
+    private String blockName;
+    public static Map<String,Block> nameToMimicingBlock = new HashMap<>();
 
-    public GearSwapperBlock(Material material, String textureName, String blockName) {
+    public GearSwapperBlock(Material material, String blockName) {
         super(material);
-        this.textureName = textureName;
         setUnlocalizedName(blockName);
         setHardness(2.0f);
         setHarvestLevel("pickaxe", 0);
-//        setBlockTextureName(textureName);
         setCreativeTab(CreativeTabs.tabMisc);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.blockName = blockName;
     }
 
     @SideOnly(Side.CLIENT)
     public void registerModel(Block block) {
 
+        nameToMimicingBlock.put(MIMIC_PREFIX + blockName, block);
+
         ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-                return new ModelResourceLocation("dummy_dummy_dummy");
+                return new ModelResourceLocation(MIMIC_PREFIX + blockName);
             }
         });
     }
@@ -103,12 +107,6 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
 //            currenttip.add("Right-click to restore current setup from this slot");
 //        }
 //        return currenttip;
-//    }
-
-//    @SideOnly(Side.CLIENT)
-//    @Override
-//    public void registerBlockIcons(IIconRegister iconRegister) {
-//        iconSide = iconRegister.registerIcon(textureName);
 //    }
 
 
@@ -236,16 +234,6 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
         world.setBlockToAir(pos);
     }
 
-
-//    @Override
-//    public IIcon getIcon(int side, int meta) {
-//        return iconSide;
-//    }
-//
-//    @Override
-//    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//        return iconSide;
-//    }
 
     private static EnumFacing getOrientation(IBlockAccess world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);

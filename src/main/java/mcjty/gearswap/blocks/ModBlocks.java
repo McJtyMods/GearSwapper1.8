@@ -1,7 +1,9 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.Config;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -12,26 +14,26 @@ public class ModBlocks {
     public static GearSwapperBlock lapisGearSwapperBlock;
     public static GearSwapperBlock stoneGearSwapperBlock;
     public static GearSwapperBlock moddedGearSwapperBlock;
-    public static GearSwapperGlassBlock glassGearSwapperBlock;
+    public static GearSwapperBlock glassGearSwapperBlock;
 
     public static void init() {
-        woodenGearSwapperBlock = new GearSwapperBlock(Material.wood, "minecraft:planks_oak", "gearSwapperWood");
+        woodenGearSwapperBlock = new GearSwapperBlock(Material.wood, "gearSwapperWood");
         GameRegistry.registerBlock(woodenGearSwapperBlock, "gearSwapperWood");
 
-        ironGearSwapperBlock = new GearSwapperBlock(Material.iron, "minecraft:iron_block", "gearSwapperIron");
+        ironGearSwapperBlock = new GearSwapperBlock(Material.iron, "gearSwapperIron");
         GameRegistry.registerBlock(ironGearSwapperBlock, "gearSwapperIron");
 
-        lapisGearSwapperBlock = new GearSwapperBlock(Material.rock, "minecraft:lapis_block", "gearSwapperLapis");
+        lapisGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperLapis");
         GameRegistry.registerBlock(lapisGearSwapperBlock, "gearSwapperLapis");
 
-        stoneGearSwapperBlock = new GearSwapperBlock(Material.rock, "minecraft:stone", "gearSwapperStone");
+        stoneGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperStone");
         GameRegistry.registerBlock(stoneGearSwapperBlock, "gearSwapperStone");
 
-        glassGearSwapperBlock = new GearSwapperGlassBlock(Material.glass, "minecraft:glass", "gearSwapperGlass");
+        glassGearSwapperBlock = new GearSwapperBlock(Material.glass, "gearSwapperGlass");
         GameRegistry.registerBlock(glassGearSwapperBlock, "gearSwapperGlass");
 
         if (!Config.moddedTextureName.isEmpty()) {
-            moddedGearSwapperBlock = new GearSwapperBlock(Material.rock, Config.moddedTextureName, "gearSwapperModded");
+            moddedGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperModded");
             GameRegistry.registerBlock(moddedGearSwapperBlock, "gearSwapperModded");
         }
 
@@ -40,7 +42,10 @@ public class ModBlocks {
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
-        // @todo
-        woodenGearSwapperBlock.registerModel(null);
+        woodenGearSwapperBlock.registerModel(Blocks.planks);
+        ironGearSwapperBlock.registerModel(Blocks.iron_block);
+        lapisGearSwapperBlock.registerModel(Blocks.lapis_block);
+        stoneGearSwapperBlock.registerModel(Blocks.stone);
+        glassGearSwapperBlock.registerModel(Blocks.glass);
     }
 }
