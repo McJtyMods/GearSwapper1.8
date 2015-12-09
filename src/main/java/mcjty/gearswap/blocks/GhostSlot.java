@@ -1,5 +1,7 @@
 package mcjty.gearswap.blocks;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import mcjty.gearswap.GearSwap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -49,15 +51,14 @@ public class GhostSlot extends Slot {
             if (item == null) {
                 return false;
             }
-//            if (!(item instanceof IBauble)) {
-//                return false;
-//            }
-//            IBauble bauble = (IBauble) item;
-//            BaubleType baubleType = bauble.getBaubleType(stack);
-//            return (baubleType == BaubleType.AMULET && type == BAUBLE_AMULET) ||
-//                    (baubleType == BaubleType.RING && type == BAUBLE_RING) ||
-//                    (baubleType == BaubleType.BELT && type == BAUBLE_BELT);
-            return false;   // @todo temporary
+            if (!(item instanceof IBauble)) {
+                return false;
+            }
+            IBauble bauble = (IBauble) item;
+            BaubleType baubleType = bauble.getBaubleType(stack);
+            return (baubleType == BaubleType.AMULET && type == BAUBLE_AMULET) ||
+                    (baubleType == BaubleType.RING && type == BAUBLE_RING) ||
+                    (baubleType == BaubleType.BELT && type == BAUBLE_BELT);
         } else {
             return true;
         }
