@@ -3,6 +3,8 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.Config;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
     public static GearSwapperBlock woodenGearSwapperBlock;
@@ -34,5 +36,11 @@ public class ModBlocks {
         }
 
         GameRegistry.registerTileEntity(GearSwapperTE.class, "gearSwapper");
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void initModels() {
+        // @todo
+        woodenGearSwapperBlock.registerModel(null);
     }
 }
