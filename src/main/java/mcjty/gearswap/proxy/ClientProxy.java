@@ -3,6 +3,7 @@ package mcjty.gearswap.proxy;
 import mcjty.gearswap.ModRenderers;
 import mcjty.gearswap.blocks.GearSwapperBlock;
 import mcjty.gearswap.blocks.ModBlocks;
+import mcjty.gearswap.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,13 +32,13 @@ public class ClientProxy extends CommonProxy {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
         ModBlocks.initModels();
-
     }
 
     @Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
         ModRenderers.init();
+        ModItems.initModels();
 //        MinecraftForge.EVENT_BUS.register(this);
 //        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 //        KeyBindings.init();
