@@ -2,6 +2,7 @@ package mcjty.gearswap.items;
 
 import mcjty.gearswap.GearSwap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,7 +17,7 @@ public class ModItems {
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-        renderItem.getItemModelMesher().register(forceEmptyItem, 0, new ModelResourceLocation(GearSwap.MODID + ":emptyItem", "inventory"));
+        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        mesher.register(forceEmptyItem, 0, new ModelResourceLocation(GearSwap.MODID + ":" + forceEmptyItem.getUnlocalizedName().substring(5), "inventory"));
     }
 }

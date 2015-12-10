@@ -14,8 +14,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ForceEmptyItem extends Item implements IBauble {
     public ForceEmptyItem() {
         setMaxStackSize(1);
-        setUnlocalizedName(GearSwap.MODID + "_emptyItem");
-//        setTextureName(GearSwap.MODID + ":emptyItem");
+//        setUnlocalizedName(GearSwap.MODID + "_emptyItem");
+        setUnlocalizedName("emptyItem");
         GameRegistry.registerItem(this, "emptyItem");
     }
 

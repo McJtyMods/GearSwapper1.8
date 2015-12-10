@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ISmartBlockModel;
@@ -31,7 +30,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
-        ModBlocks.initModels();
+        ModBlocks.initMimicingModels();
     }
 
     @Override
@@ -39,6 +38,7 @@ public class ClientProxy extends CommonProxy {
         super.init(e);
         ModRenderers.init();
         ModItems.initModels();
+        ModBlocks.initModels();
 //        MinecraftForge.EVENT_BUS.register(this);
 //        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 //        KeyBindings.init();
