@@ -34,6 +34,9 @@ if (ENV.DRONE_BUILD_NUMBER) {
 group= "mcjty.gearswap" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "gearswap"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 minecraft {
     version = "1.8.8-11.15.0.1612-1.8.8"
     runDir = "run"
