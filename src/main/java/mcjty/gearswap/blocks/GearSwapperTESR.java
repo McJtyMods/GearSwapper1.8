@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,11 +28,11 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_ENABLE_BIT | GL11.GL_LIGHTING_BIT | GL11.GL_TEXTURE_BIT);
+        GlStateManager.pushAttrib();
 
         MovingObjectPosition mouseOver = Minecraft.getMinecraft().objectMouseOver;
         int index;
-        if (mouseOver != null && mouseOver.getBlockPos() == tileEntity.getPos()) {
+        if (mouseOver != null && mouseOver.getBlockPos().equals(tileEntity.getPos())) {
             index = GearSwapperBlock.getSlot(mouseOver, tileEntity.getWorld());
         } else {
             index = -2;
@@ -39,17 +40,17 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
 
         Block block = tileEntity.getBlockType();
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         EnumFacing facing = GearSwapperBlock.getFacing(tileEntity.getBlockMetadata());
 
-        GL11.glTranslatef((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
+        GlStateManager.translate((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
 
         if (facing == EnumFacing.UP) {
-            GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glTranslatef(0.0F, 0.0F, -0.68F);
+            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.0F, -0.68F);
         } else if (facing == EnumFacing.DOWN) {
-            GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glTranslatef(0.0F, 0.0F, -.184F);
+            GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.translate(0.0F, 0.0F, -.184F);
         } else {
             float rotY = 0.0F;
             if (facing == EnumFacing.NORTH) {
@@ -59,35 +60,31 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
             } else if (facing == EnumFacing.EAST) {
                 rotY = -90.0F;
             }
-            GL11.glRotatef(-rotY, 0.0F, 1.0F, 0.0F);
-            GL11.glTranslatef(0.0F, -0.2500F, -0.4375F);
+            GlStateManager.rotate(-rotY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(0.0F, -0.2500F, -0.4375F);
         }
 
         GearSwapperTE gearSwapperTE = (GearSwapperTE) tileEntity;
 
-        GL11.glTranslatef(0.0F, 0.0F, 0.9F);
-
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GlStateManager.translate(0.0F, 0.0F, 0.9F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
 
         renderSlotHilight(index, block == ModBlocks.ironGearSwapperBlock);
         renderSlots(gearSwapperTE);
 
-//        RenderHelper.disableStandardItemLighting();
-
-        GL11.glPopMatrix();
-
-        GL11.glPopAttrib();
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
     }
 
     private void renderSlotHilight(int index, boolean darktext) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
-        GL11.glTranslatef(-0.5F, 0.5F, 0.04F);
         float factor = 2.0f;
         float f3 = 0.0075F;
-        GL11.glScalef(f3 * factor, -f3 * factor, f3);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.translate(-0.5F, 0.5F, 0.04F);
+        GlStateManager.scale(f3 * factor, -f3 * factor, f3);
+        GlStateManager.disableLighting();
 
         for (int i = 0 ; i < 4 ; i++) {
             Gui.drawRect(xx[i] - 4, yy[i] - 4, xx[i] + 22, yy[i] - 3, 0xff222222);
@@ -97,12 +94,13 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
             Gui.drawRect(xx[i] - 3, yy[i] - 3, xx[i] + 21, yy[i] + 21, index == i ? 0x55666666 : 0x55000000);
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
-        GL11.glPushMatrix();
-        GL11.glTranslatef(-0.5F, 0.5F, 0.06F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.5F, 0.5F, 0.06F);
+
         factor = 1.0f;
-        GL11.glScalef(f3 * factor, -f3 * factor, f3);
+        GlStateManager.scale(f3 * factor, -f3 * factor, f3);
         FontRenderer fontrenderer = this.getFontRenderer();
         if (darktext) {
             fontrenderer.drawString("Settings...", 10, 120, index == -1 ? 0xff000000 : 0xff666666);
@@ -110,7 +108,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
             fontrenderer.drawString("Settings...", 10, 120, index == -1 ? 0xffffffff : 0xff888888);
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private void renderSlots(GearSwapperTE gearSwapperTE) {
@@ -129,6 +127,8 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
                 itemRender.renderItemAndEffectIntoGUI(stack, xx[i], yy[i]);
             }
         }
+
+        RenderHelper.enableStandardItemLighting();
     }
 
 }

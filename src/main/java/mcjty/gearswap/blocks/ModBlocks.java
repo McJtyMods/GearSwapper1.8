@@ -14,7 +14,7 @@ public class ModBlocks {
     public static GearSwapperBlock lapisGearSwapperBlock;
     public static GearSwapperBlock stoneGearSwapperBlock;
     public static GearSwapperBlock moddedGearSwapperBlock;
-    public static GearSwapperBlock glassGearSwapperBlock;
+    public static GearSwapperGlassBlock glassGearSwapperBlock;
 
     public static void init() {
         woodenGearSwapperBlock = new GearSwapperBlock(Material.wood, "gearSwapperWood");
@@ -29,7 +29,7 @@ public class ModBlocks {
         stoneGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperStone");
         GameRegistry.registerBlock(stoneGearSwapperBlock, "gearSwapperStone");
 
-        glassGearSwapperBlock = new GearSwapperBlock(Material.glass, "gearSwapperGlass");
+        glassGearSwapperBlock = new GearSwapperGlassBlock(Material.glass, "gearSwapperGlass");
         GameRegistry.registerBlock(glassGearSwapperBlock, "gearSwapperGlass");
 
         if (!Config.moddedTextureName.isEmpty()) {

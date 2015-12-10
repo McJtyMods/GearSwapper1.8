@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,20 +15,17 @@ public class GearSwapperGlassBlock extends GearSwapperBlock {
         super(material, blockName);
     }
 
-//
-//
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public int getRenderBlockPass()
-//    {
-//        return 0;
-//    }
-//
-//    @Override
-//    public boolean renderAsNormalBlock()
-//    {
-//        return false;
-//    }
+    @SideOnly(Side.CLIENT)
+    public EnumWorldBlockLayer getBlockLayer()
+    {
+        return EnumWorldBlockLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isFullCube()
+    {
+        return false;
+    }
 
     @Override
     public boolean isOpaqueCube()
