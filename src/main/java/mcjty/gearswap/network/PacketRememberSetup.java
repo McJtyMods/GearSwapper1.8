@@ -3,6 +3,7 @@ package mcjty.gearswap.network;
 import io.netty.buffer.ByteBuf;
 import mcjty.gearswap.blocks.GearSwapperTE;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketRememberSetup implements IMessage, IMessageHandler<PacketRememberSetup, IMessage> {
+public class PacketRememberSetup implements IMessage {
     private BlockPos pos;
     private int index;
 
@@ -38,15 +39,21 @@ public class PacketRememberSetup implements IMessage, IMessageHandler<PacketReme
         this.index = index;
     }
 
-    @Override
-    public IMessage onMessage(PacketRememberSetup message, MessageContext ctx) {
-        EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-        TileEntity te = playerEntity.worldObj.getTileEntity(message.pos);
-        if (te instanceof GearSwapperTE) {
-            GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
-            gearSwapperTE.rememberSetup(message.index, playerEntity);
-            playerEntity.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Remembered current hotbar and armor"));
+    public static class Handler implements IMessageHandler<PacketRememberSetup, IMessage> {
+        @Override
+        public IMessage onMessage(PacketRememberSetup message, MessageContext ctx) {
+            MinecraftServer.getServer().addScheduledTask(() -> handle(message, ctx));
+            return null;
         }
-        return null;
+
+        private void handle(PacketRememberSetup message, MessageContext ctx) {
+            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
+            TileEntity te = playerEntity.worldObj.getTileEntity(message.pos);
+            if (te instanceof GearSwapperTE) {
+                GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
+                gearSwapperTE.rememberSetup(message.index, playerEntity);
+                playerEntity.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Remembered current hotbar and armor"));
+            }
+        }
     }
 }

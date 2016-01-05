@@ -3,13 +3,14 @@ package mcjty.gearswap.network;
 import io.netty.buffer.ByteBuf;
 import mcjty.gearswap.blocks.GearSwapperTE;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketToggleMode implements IMessage, IMessageHandler<PacketToggleMode, IMessage> {
+public class PacketToggleMode implements IMessage {
     private BlockPos pos;
     private int index;
 
@@ -36,16 +37,21 @@ public class PacketToggleMode implements IMessage, IMessageHandler<PacketToggleM
         this.index = index;
     }
 
-    @Override
-    public IMessage onMessage(PacketToggleMode message, MessageContext ctx) {
-        EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-        TileEntity te = playerEntity.worldObj.getTileEntity(message.pos);
-        if (te instanceof GearSwapperTE) {
-            GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
-            gearSwapperTE.toggelExportMode(message.index);
-
+    public static class Handler implements IMessageHandler<PacketToggleMode, IMessage> {
+        @Override
+        public IMessage onMessage(PacketToggleMode message, MessageContext ctx) {
+            MinecraftServer.getServer().addScheduledTask(() -> handle(message, ctx));
+            return null;
         }
-        return null;
-    }
 
+        private void handle(PacketToggleMode message, MessageContext ctx) {
+            EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
+            TileEntity te = playerEntity.worldObj.getTileEntity(message.pos);
+            if (te instanceof GearSwapperTE) {
+                GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
+                gearSwapperTE.toggelExportMode(message.index);
+
+            }
+        }
+    }
 }

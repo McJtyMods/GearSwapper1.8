@@ -16,7 +16,7 @@ public class PacketHandler {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(channelName);
 
         // Server side
-        INSTANCE.registerMessage(PacketToggleMode.class, PacketToggleMode.class, nextID(), Side.SERVER);
-        INSTANCE.registerMessage(PacketRememberSetup.class, PacketRememberSetup.class, nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketToggleMode.Handler.class, PacketToggleMode.class, nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketRememberSetup.Handler.class, PacketRememberSetup.class, nextID(), Side.SERVER);
     }
 }
