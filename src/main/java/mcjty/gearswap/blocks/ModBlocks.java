@@ -1,8 +1,14 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.Config;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,10 +28,12 @@ public class ModBlocks {
         stoneGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperStone");
         glassGearSwapperBlock = new GearSwapperGlassBlock(Material.glass, "gearSwapperGlass");
 
-        if (!Config.moddedTextureName.isEmpty()) {
-            moddedGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperModded");
+        if (!Config.customBlockName.isEmpty()) {
+            Block b = Block.blockRegistry.getObject(new ResourceLocation(Config.customBlockName));
+            if (b != null) {
+                moddedGearSwapperBlock = new GearSwapperBlock(Material.rock, "gearSwapperModded");
+            }
         }
-
         GameRegistry.registerTileEntity(GearSwapperTE.class, "gearSwapper");
     }
 
@@ -36,6 +44,12 @@ public class ModBlocks {
         lapisGearSwapperBlock.registerModel(Blocks.lapis_block);
         stoneGearSwapperBlock.registerModel(Blocks.stone);
         glassGearSwapperBlock.registerModel(Blocks.glass);
+        if (!Config.customBlockName.isEmpty()) {
+            Block b = Block.blockRegistry.getObject(new ResourceLocation(Config.customBlockName));
+            if (b != null) {
+                moddedGearSwapperBlock.registerModel(b);
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -45,5 +59,14 @@ public class ModBlocks {
         lapisGearSwapperBlock.initModel();
         stoneGearSwapperBlock.initModel();
         glassGearSwapperBlock.initModel();
+        if (!Config.customBlockName.isEmpty()) {
+            Block b = Block.blockRegistry.getObject(new ResourceLocation(Config.customBlockName));
+            if (b != null) {
+                ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+                mesher.register(Item.getItemFromBlock(moddedGearSwapperBlock), 0, new ModelResourceLocation(b.getRegistryName(), "inventory"));
+
+//                moddedGearSwapperBlock.initModel();
+            }
+        }
     }
 }
