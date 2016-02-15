@@ -32,7 +32,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
 
         MovingObjectPosition mouseOver = Minecraft.getMinecraft().objectMouseOver;
         int index;
-        if (mouseOver != null && mouseOver.getBlockPos().equals(tileEntity.getPos())) {
+        if (mouseOver != null && tileEntity.getPos().equals(mouseOver.getBlockPos())) {
             index = GearSwapperBlock.getSlot(mouseOver, tileEntity.getWorld());
         } else {
             index = -2;
