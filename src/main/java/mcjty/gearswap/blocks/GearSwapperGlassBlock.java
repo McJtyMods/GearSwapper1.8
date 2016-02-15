@@ -15,6 +15,7 @@ public class GearSwapperGlassBlock extends GearSwapperBlock {
         super(material, blockName);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public EnumWorldBlockLayer getBlockLayer()
     {

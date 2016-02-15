@@ -10,6 +10,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,6 +24,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,11 +48,17 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
         setCreativeTab(CreativeTabs.tabMisc);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.blockName = blockName;
+        GameRegistry.registerBlock(this, blockName);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        mesher.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @SideOnly(Side.CLIENT)
     public void registerModel(Block block) {
-
         nameToMimicingBlock.put(MIMIC_PREFIX + blockName, block);
 
         ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
