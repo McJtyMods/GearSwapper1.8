@@ -20,7 +20,12 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
@@ -271,7 +276,15 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
                 case MODE_REMOTEINV:
                     for (EnumFacing facing : EnumFacing.values()) {
                         TileEntity te = worldObj.getTileEntity(pos.offset(facing));
-                        if (te instanceof IInventory) {
+                        if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
+                            IItemHandler capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+                            ItemStack stack = ItemHandlerHelper.insertItem(capability, item, false);
+                            if (stack == null) {
+                                return true;
+                            }
+                            item = stack;
+
+                        } else if (te instanceof IInventory) {
                             IInventory otherInventory = (IInventory) te;
                             int left = InventoryHelper.mergeItemStackSafe(otherInventory, facing.getOpposite(), item, 0, otherInventory.getSizeInventory(), null);
                             if (left == 0) {
@@ -598,5 +611,23 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     @Override
     public IChatComponent getDisplayName() {
         return null;
+    }
+
+    IItemHandler invHandler = new InvWrapper(this);
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) invHandler;
+        }
+        return super.getCapability(capability, facing);
     }
 }

@@ -2,7 +2,6 @@ package mcjty.gearswap.varia;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
@@ -98,22 +97,5 @@ public class InventoryHelper {
 
     private static boolean isItemStackConsideredEqual(ItemStack result, ItemStack itemstack1) {
         return itemstack1 != null && itemstack1.getItem() == result.getItem() && (!result.getHasSubtypes() || result.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(result, itemstack1);
-    }
-
-    public static void compactStacks(ItemStack[] stacks, int start, int max) {
-        InventoryBasic inv = new InventoryBasic("temp", true, max);
-        for (int i = 0 ; i < max ; i++) {
-            ItemStack stack = stacks[i+start];
-            if (stack != null) {
-                mergeItemStack(inv, stack, 0, max, null);
-            }
-        }
-        for (int i = 0 ; i < max ; i++) {
-            ItemStack stack = inv.getStackInSlot(i);
-            if (stack != null && stack.stackSize == 0) {
-                stack = null;
-            }
-            stacks[i+start] = stack;
-        }
     }
 }
