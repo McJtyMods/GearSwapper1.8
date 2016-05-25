@@ -3,11 +3,11 @@ package mcjty.gearswap.network;
 import io.netty.buffer.ByteBuf;
 import mcjty.gearswap.blocks.GearSwapperTE;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -42,7 +42,7 @@ public class PacketRememberSetup implements IMessage {
     public static class Handler implements IMessageHandler<PacketRememberSetup, IMessage> {
         @Override
         public IMessage onMessage(PacketRememberSetup message, MessageContext ctx) {
-            MinecraftServer.getServer().addScheduledTask(() -> handle(message, ctx));
+            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
             return null;
         }
 
@@ -52,7 +52,7 @@ public class PacketRememberSetup implements IMessage {
             if (te instanceof GearSwapperTE) {
                 GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
                 gearSwapperTE.rememberSetup(message.index, playerEntity);
-                playerEntity.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Remembered current hotbar and armor"));
+                playerEntity.addChatComponentMessage(new TextComponentString(TextFormatting.YELLOW + "Remembered current hotbar and armor"));
             }
         }
     }

@@ -5,6 +5,7 @@ import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.Tools;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,17 +16,19 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
+
+import javax.annotation.Nullable;
 
 public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
@@ -68,9 +71,10 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         writeRestorableToNBT(tagCompound);
+        return tagCompound;
     }
 
     public void writeRestorableToNBT(NBTTagCompound tagCompound) {
@@ -103,12 +107,14 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
             exportModes[i] = MODE_PLAYERINV;
         }
         markDirty();
-        worldObj.markBlockForUpdate(pos);
+        IBlockState state = worldObj.getBlockState(pos);
+        worldObj.notifyBlockUpdate(pos, state, state, 3);
     }
 
     public void setFaceIconSlot(int index, ItemStack stack) {
         setInventorySlotContents(index, stack);
-        worldObj.markBlockForUpdate(pos);
+        IBlockState state = worldObj.getBlockState(pos);
+        worldObj.notifyBlockUpdate(pos, state, state, 3);
     }
 
     // Get total player inventory count. This is 9+4 (hotbar+armor) without baubles
@@ -164,7 +170,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     public void rememberSetup(int index, EntityPlayer player) {
-        setFaceIconSlot(index, player.getHeldItem());
+        setFaceIconSlot(index, player.getHeldItem(EnumHand.MAIN_HAND));
 
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack stack = getStackFromPlayerInventory(i, player);
@@ -428,16 +434,21 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
         return false;
     }
 
-
     @Override
-    public Packet getDescriptionPacket() {
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbtTag = new NBTTagCompound();
         this.writeToNBT(nbtTag);
-        return new S35PacketUpdateTileEntity(pos, 1, nbtTag);
+        return new SPacketUpdateTileEntity(pos, 1, nbtTag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
         readFromNBT(packet.getNbtCompound());
     }
 
@@ -609,7 +620,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     @Override
-    public IChatComponent getDisplayName() {
+    public ITextComponent getDisplayName() {
         return null;
     }
 

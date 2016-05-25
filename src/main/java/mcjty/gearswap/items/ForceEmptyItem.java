@@ -2,7 +2,6 @@ package mcjty.gearswap.items;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import mcjty.gearswap.GearSwap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,7 +15,8 @@ public class ForceEmptyItem extends Item implements IBauble {
         setMaxStackSize(1);
 //        setUnlocalizedName(GearSwap.MODID + "_emptyItem");
         setUnlocalizedName("emptyItem");
-        GameRegistry.registerItem(this, "emptyItem");
+        setRegistryName("emptyItem");
+        GameRegistry.register(this);
     }
 
     @Override

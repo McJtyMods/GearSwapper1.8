@@ -7,20 +7,25 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -29,44 +34,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GearSwapperBlock extends Block implements ITileEntityProvider {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final String MIMIC_PREFIX = "GearSwapper:mimic_";
-
-    private String blockName;
-    public static Map<String,Block> nameToMimicingBlock = new HashMap<>();
 
     public GearSwapperBlock(Material material, String blockName) {
         super(material);
         setUnlocalizedName(blockName);
+        setRegistryName(blockName);
         setHardness(2.0f);
         setHarvestLevel("pickaxe", 0);
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(CreativeTabs.MISC);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        this.blockName = blockName;
-        GameRegistry.registerBlock(this, blockName);
+        GameRegistry.register(this);
+        GameRegistry.register(new ItemBlock(this), getRegistryName());
     }
 
     @SideOnly(Side.CLIENT)
     public void initModel() {
-        ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        mesher.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void registerModel(Block block) {
-        nameToMimicingBlock.put(MIMIC_PREFIX + blockName, block);
-
-        ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-                return new ModelResourceLocation(MIMIC_PREFIX + blockName);
-            }
-        });
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @Override
@@ -88,7 +75,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
     }
 
 
-    public static int getSlot(MovingObjectPosition mouseOver, World world) {
+    public static int getSlot(RayTraceResult mouseOver, World world) {
         BlockPos blockPos = mouseOver.getBlockPos();
         int x = blockPos.getX();
         int y = blockPos.getY();
@@ -122,7 +109,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
     public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
         if (world.isRemote && player.isSneaking()) {
             // On client. We find out what part of the block was hit and send that to the server.
-            MovingObjectPosition mouseOver = Minecraft.getMinecraft().objectMouseOver;
+            RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
             int index = getSlot(mouseOver, world);
             if (index >= 0) {
                 PacketHandler.INSTANCE.sendToServer(new PacketRememberSetup(pos, index));
@@ -131,7 +118,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float sx, float sy, float sz) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float sx, float sy, float sz) {
         if (!world.isRemote) {
             EnumFacing k = getOrientation(world, pos);
             if (side == k) {
@@ -146,7 +133,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
                     }
 
                     gearSwapperTE.restoreSetup(index, player);
-                    player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "Restored hotbar and armor"));
+                    player.addChatComponentMessage(new TextComponentString(TextFormatting.YELLOW + "Restored hotbar and armor"));
                 }
             } else {
                 player.openGui(GearSwap.instance, GearSwap.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());
@@ -231,15 +218,15 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if (willHarvest) return true; // If it will harvest, delay deletion of the block until after getDrops
-        return super.removedByPlayer(world, pos, player, willHarvest);
+        return super.removedByPlayer(state, world, pos, player, willHarvest);
     }
 
     @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te) {
-        super.harvestBlock(world, player, pos, state, te);
-        world.setBlockToAir(pos);
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+        super.harvestBlock(worldIn, player, pos, state, te, stack);
+        worldIn.setBlockToAir(pos);
     }
 
 
@@ -283,13 +270,13 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
 
 
     @Override
-    public boolean isFullCube() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -313,8 +300,8 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
 
 

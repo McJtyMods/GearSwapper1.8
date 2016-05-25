@@ -4,10 +4,13 @@ import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.ShadowInventory;
 import mcjty.gearswap.varia.Tools;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public class GearSwapperContainer extends Container {
     private IInventory playerInventory;
@@ -135,9 +138,9 @@ public class GearSwapperContainer extends Container {
         return itemstack;
     }
 
-
+    @Nullable
     @Override
-    public ItemStack slotClick(int index, int button, int mode, EntityPlayer player) {
+    public ItemStack slotClick(int index, int dragType, ClickType clickTypeIn, EntityPlayer player) {
         if (gearInventory.isGhostSlot(index)) {
             Slot slot = getSlot(index);     // Index of slot matches index in gear inventory!
             if (slot.getHasStack()) {
@@ -149,6 +152,6 @@ public class GearSwapperContainer extends Container {
             }
             return null;
         }
-        return super.slotClick(index, button, mode, player);
+        return super.slotClick(index, dragType, clickTypeIn, player);
     }
 }

@@ -8,15 +8,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModCrafting {
     public static void init() {
-        ItemStack lapisStack = new ItemStack(Items.dye, 1, 4);
+        ItemStack lapisStack = new ItemStack(Items.DYE, 1, 4);
 
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.woodenGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.planks, 'C', Items.comparator, 'c', Blocks.chest);
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.ironGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Items.iron_ingot, 'C', Items.comparator, 'c', Blocks.chest);
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.lapisGearSwapperBlock), "pCp", "pcp", "ppp", 'p', lapisStack, 'C', Items.comparator, 'c', Blocks.chest);
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.stoneGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.stone, 'C', Items.comparator, 'c', Blocks.chest);
-        GameRegistry.addRecipe(new ItemStack(ModBlocks.glassGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.glass, 'C', Items.comparator, 'c', Blocks.chest);
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.woodenGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.PLANKS, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.ironGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Items.IRON_INGOT, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.lapisGearSwapperBlock), "pCp", "pcp", "ppp", 'p', lapisStack, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.stoneGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.STONE, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
+        GameRegistry.addRecipe(new ItemStack(ModBlocks.glassGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Blocks.GLASS, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
         if (ModBlocks.moddedGearSwapperBlock != null) {
-            GameRegistry.addRecipe(new ItemStack(ModBlocks.moddedGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Items.redstone, 'C', Items.comparator, 'c', Blocks.chest);
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.moddedGearSwapperBlock), "pCp", "pcp", "ppp", 'p', Items.REDSTONE, 'C', Items.COMPARATOR, 'c', Blocks.CHEST);
         }
     }
 }

@@ -4,6 +4,7 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import mcjty.gearswap.GearSwap;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -46,7 +47,15 @@ public class GhostSlot extends Slot {
     public boolean isItemValid(ItemStack stack) {
         Item item = stack.getItem();
         if (type >= ARMOR_HELMET && type <= ARMOR_BOOTS) {
-            return item != null && item.isValidArmor(stack, type, null);
+            EntityEquipmentSlot slot;
+            switch (type) {
+                case ARMOR_HELMET: slot = EntityEquipmentSlot.HEAD; break;
+                case ARMOR_CHESTPLATE: slot = EntityEquipmentSlot.CHEST; break;
+                case ARMOR_LEGGINGS: slot = EntityEquipmentSlot.LEGS; break;
+                case ARMOR_BOOTS: slot = EntityEquipmentSlot.FEET; break;
+                default: slot = null;
+            }
+            return item != null && item.isValidArmor(stack, slot, null);
         } else if (GearSwap.baubles && type >= BAUBLE_RING && type <= BAUBLE_BELT) {
             if (item == null) {
                 return false;

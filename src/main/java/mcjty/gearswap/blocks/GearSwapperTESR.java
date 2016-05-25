@@ -7,13 +7,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -30,7 +30,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
         GlStateManager.pushAttrib();
 
-        MovingObjectPosition mouseOver = Minecraft.getMinecraft().objectMouseOver;
+        RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
         int index;
         if (mouseOver != null && tileEntity.getPos().equals(mouseOver.getBlockPos())) {
             index = GearSwapperBlock.getSlot(mouseOver, tileEntity.getWorld());
