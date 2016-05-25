@@ -14,17 +14,14 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
+        ModRenderers.init();
+        ModItems.initModels();
+        ModBlocks.initModels();
     }
 
     @Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
-        ModRenderers.init();
-        ModItems.initModels();
-        ModBlocks.initModels();
-//        MinecraftForge.EVENT_BUS.register(this);
-//        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
-//        KeyBindings.init();
     }
 
     @Override

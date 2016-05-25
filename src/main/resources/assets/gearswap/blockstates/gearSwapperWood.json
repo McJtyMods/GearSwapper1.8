@@ -1,5 +1,18 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "oak_planks"
+  },
   "variants": {
-    "normal": { "model": "gearswap:gearSwapperWood" }
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    }
   }
 }
