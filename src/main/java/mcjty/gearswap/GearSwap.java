@@ -1,12 +1,12 @@
 package mcjty.gearswap;
 
+import mcjty.gearswap.compat.MainCompatHandler;
 import mcjty.gearswap.proxy.CommonProxy;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Level;
@@ -49,7 +49,8 @@ public class GearSwap {
         config = new Configuration(new File(modConfigDir, "gearswap.cfg"));
         proxy.preInit(e);
 
-        FMLInterModComms.sendMessage("Waila", "register", "mcjty.gearswap.WailaSupport.load");
+        MainCompatHandler.registerWaila();
+        MainCompatHandler.registerTOP();
     }
 
     /**

@@ -1,8 +1,15 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.GearSwap;
+import mcjty.gearswap.compat.top.TOPInfoProvider;
+import mcjty.gearswap.compat.waila.WailaInfoProvider;
 import mcjty.gearswap.network.PacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -24,6 +31,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -36,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GearSwapperBlock extends Block implements ITileEntityProvider {
+public class GearSwapperBlock extends Block implements ITileEntityProvider, WailaInfoProvider, TOPInfoProvider {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public GearSwapperBlock(Material material, String blockName) {
@@ -63,7 +71,6 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean whatIsThis) {
-        NBTTagCompound tagCompound = itemStack.getTagCompound();
         list.add("This block can remember four different sets of tools, weapons");
         list.add("and armor and allows you to quickly switch between them.");
         list.add("Sneak-left-click to store current hotbar+armor in slot.");
@@ -88,18 +95,44 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider {
         }
     }
 
-//    @SideOnly(Side.CLIENT)
-//    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-//        MovingObjectPosition mouseOver = accessor.getPosition();
-//        int index = getSlot(mouseOver, accessor.getWorld());
-//        if (index == -1) {
-//            currenttip.add("Right-click to access GUI");
-//        } else {
-//            currenttip.add("Sneak-left-click to store current setup in this slot");
-//            currenttip.add("Right-click to restore current setup from this slot");
-//        }
-//        return currenttip;
-//    }
+    public static int getSlot(World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec) {
+        int x = blockPos.getX();
+        int y = blockPos.getY();
+        int z = blockPos.getZ();
+        EnumFacing k = getOrientation(world, blockPos);
+        if (sideHit == k) {
+            float sx = (float) (hitVec.xCoord - x);
+            float sy = (float) (hitVec.yCoord - y);
+            float sz = (float) (hitVec.zCoord - z);
+            return calculateHitIndex(sx, sy, sz, k);
+        } else {
+            return -1;
+        }
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        int index = getSlot(world, data.getPos(), data.getSideHit(), data.getHitVec());
+        if (index == -1) {
+            probeInfo.text("Right-click to access GUI");
+        } else {
+            probeInfo.text(TextFormatting.YELLOW + "Sneak-left-click:" + TextFormatting.WHITE + " store current setup in slot");
+            probeInfo.text(TextFormatting.YELLOW + "Right-click:" + TextFormatting.WHITE + " restore current setup from slot");
+        }
+    }
+
+    @Override
+    public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        RayTraceResult mouseOver = accessor.getMOP();
+        int index = getSlot(mouseOver, accessor.getWorld());
+        if (index == -1) {
+            currenttip.add("Right-click to access GUI");
+        } else {
+            currenttip.add("Sneak-left-click: store current setup in slot");
+            currenttip.add("Right-click: restore current setup from slot");
+        }
+        return currenttip;
+    }
 
 
     @Override
