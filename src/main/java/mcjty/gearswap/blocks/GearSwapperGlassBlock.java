@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GearSwapperGlassBlock extends GearSwapperBlock {
+
     public GearSwapperGlassBlock(Material material, String blockName) {
         super(material, blockName);
     }
@@ -37,13 +38,15 @@ public class GearSwapperGlassBlock extends GearSwapperBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        Block block = blockState.getBlock();
+        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+        Block block = iblockstate.getBlock();
 
         if (block == this || block == Blocks.GLASS) {
             return false;
         }
 
-        return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+//        return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+        return true;
     }
 
 }

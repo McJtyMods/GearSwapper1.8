@@ -80,19 +80,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
 
 
     public static int getSlot(RayTraceResult mouseOver, World world) {
-        BlockPos blockPos = mouseOver.getBlockPos();
-        int x = blockPos.getX();
-        int y = blockPos.getY();
-        int z = blockPos.getZ();
-        EnumFacing k = getOrientation(world, blockPos);
-        if (mouseOver.sideHit == k) {
-            float sx = (float) (mouseOver.hitVec.xCoord - x);
-            float sy = (float) (mouseOver.hitVec.yCoord - y);
-            float sz = (float) (mouseOver.hitVec.zCoord - z);
-            return calculateHitIndex(sx, sy, sz, k);
-        } else {
-            return -1;
-        }
+        return getSlot(world, mouseOver.getBlockPos(), mouseOver.sideHit, mouseOver.hitVec);
     }
 
     public static int getSlot(World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec) {
@@ -265,22 +253,6 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
         return state.getValue(FACING);
     }
 
-    public static EnumFacing determineOrientation(int x, int y, int z, EntityLivingBase entityLivingBase) {
-        if (MathHelper.abs((float) entityLivingBase.posX - x) < 2.0F && MathHelper.abs((float) entityLivingBase.posZ - z) < 2.0F) {
-            double d0 = entityLivingBase.posY + 1.82D - entityLivingBase.getYOffset();
-
-            if (d0 - y > 2.0D) {
-                return EnumFacing.UP;
-            }
-
-            if (y - d0 > 0.0D) {
-                return EnumFacing.DOWN;
-            }
-        }
-        int l = MathHelper.floor_double((entityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-        return l == 0 ? EnumFacing.NORTH : (l == 1 ? EnumFacing.EAST : (l == 2 ? EnumFacing.SOUTH : (l == 3 ? EnumFacing.WEST : EnumFacing.DOWN)));
-    }
-
     public static EnumFacing getFacingFromEntity(BlockPos clickedBlock, EntityLivingBase entityIn) {
         if (MathHelper.abs((float) entityIn.posX - clickedBlock.getX()) < 2.0F && MathHelper.abs((float) entityIn.posZ - clickedBlock.getZ()) < 2.0F) {
             double d0 = entityIn.posY + (double) entityIn.getEyeHeight();
@@ -318,8 +290,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
         return getDefaultState().withProperty(FACING, getFacing(meta));
     }
 
-    public static EnumFacing getFacing(int meta)
-    {
+    public static EnumFacing getFacing(int meta) {
         int i = meta & 7;
         return i > 5 ? null : EnumFacing.getFront(i);
     }

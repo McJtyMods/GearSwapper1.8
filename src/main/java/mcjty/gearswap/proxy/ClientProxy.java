@@ -1,6 +1,5 @@
 package mcjty.gearswap.proxy;
 
-import mcjty.gearswap.ModRenderers;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,7 +13,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
-        ModRenderers.init();
         ModItems.initModels();
         ModBlocks.initModels();
     }

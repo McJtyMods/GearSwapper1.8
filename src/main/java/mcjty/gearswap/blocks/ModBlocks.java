@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,6 +39,8 @@ public class ModBlocks {
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
+        ClientRegistry.bindTileEntitySpecialRenderer(GearSwapperTE.class, new GearSwapperTESR());
+
         woodenGearSwapperBlock.initModel();
         ironGearSwapperBlock.initModel();
         lapisGearSwapperBlock.initModel();
