@@ -33,14 +33,15 @@ import javax.annotation.Nullable;
 public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
     // First 4 slots are the ghost slots for the front icons
-    // Next there are 4 times 9+4 slots for the remembered states.
+    // Next there are 4 times 9+4+1 slots for the remembered states.
     // Then there are 16 slots general inventory.
-    // Finally we optionally have 4*4 slots for baubles.
-    private ItemStack stacks[] = new ItemStack[4 + 4*(9+4) + 16 + 4*4];
+    // Then we optionally have 4*4 slots for baubles.
+    private ItemStack stacks[] = new ItemStack[4 + 4*(9+4+1) + 16 + 4*4 + 4];
 
     public static final int SLOT_GHOST = 4;
-    public static final int SLOT_BUFFER = SLOT_GHOST + 4*(9+4);
+    public static final int SLOT_BUFFER = SLOT_GHOST + 4*(9+4+1);
     public static final int SLOT_BAUBLES = SLOT_BUFFER + 16;
+    public static final int SLOT_GHOSTSHIELD = SLOT_BAUBLES + 4*4;
 
     public static final int MODE_PLAYERINV = 0;
     public static final int MODE_LOCALINV = 1;
@@ -117,55 +118,57 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
         worldObj.notifyBlockUpdate(pos, state, state, 3);
     }
 
-    // Get total player inventory count. This is 9+4 (hotbar+armor) without baubles
-    // and 9+4+4 with baubles.
+    // Get total player inventory count. This is 9+4+1 (hotbar+armor+shield) without baubles
+    // and 9+4+1+4 with baubles.
     private int getPlayerInventorySize() {
         if (GearSwap.baubles) {
-            return 9+4+4;
+            return 9+4+1+4;
         } else {
-            return 9+4;
+            return 9+4+1;
         }
     }
 
-    // Virtual inventory index. From 0 to 9 is hotbar, The four slots after that are armor
+    // Virtual inventory index. From 0 to 9 is hotbar. The four slots after that are armor. The slot after that is shield
     private int getInventoryIndex(int i) {
         if (i < 9) {
             return i;
+        } else if (i == 13) {
+            return 40;
         } else {
             return (i-9) + 36;
         }
     }
 
     private ItemStack getStackFromPlayerInventory(int index, EntityPlayer player) {
-        if (index < 9+4) {
+        if (index < 9+4+1) {
             return player.inventory.getStackInSlot(getInventoryIndex(index));
         } else if (GearSwap.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
-                return baubles.getStackInSlot(index - (9+4));
+                return baubles.getStackInSlot(index - (9+4+1));
             }
         }
         return null;
     }
 
     private void putStackInPlayerInventory(int index, EntityPlayer player, ItemStack stack) {
-        if (index < 9+4) {
+        if (index < 9+4+1) {
             player.inventory.setInventorySlotContents(getInventoryIndex(index), stack);
         } else if (GearSwap.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
-                baubles.setInventorySlotContents(index - (9+4), stack);
+                baubles.setInventorySlotContents(index - (9+4+1), stack);
             }
         }
     }
 
     // Get the internal slot where we keep a ghost copy of the player inventory item.
     private int getInternalInventoryIndex(int index, int i) {
-        if (i >= 9+4) {
+        if (i >= 9+4+1) {
             // We have a baubles slot.
-            return SLOT_BAUBLES + index * 4 + (i-(9+4));
+            return SLOT_BAUBLES + index * 4 + (i-(9+4+1));
         } else {
-            return 4 + index * (9 + 4) + i;
+            return 4 + index * (9 + 4 + 1) + i;
         }
     }
 

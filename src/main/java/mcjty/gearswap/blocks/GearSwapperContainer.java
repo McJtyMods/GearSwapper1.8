@@ -44,6 +44,9 @@ public class GearSwapperContainer extends Container {
                 addSlotToContainer(new GhostSlot(gearInventory, index++, x, y - 18, GhostSlot.ARMOR_BOOTS - a));
                 x += 18;
             }
+            x = 177-18;
+            // Shield ghost slot
+            addSlotToContainer(new Slot(gearInventory, index++, x, y - 18));
         }
 
         for (int y = 0; y < 4; y++) {
@@ -81,14 +84,17 @@ public class GearSwapperContainer extends Container {
         }
         // Armor slots
         for (int i = 0; i < 4; i++) {
-            addSlotToContainer(new Slot(playerInventory, index++, 10, 141 - i * 18));
+            addSlotToContainer(new Slot(playerInventory, index++, 10, 117 - i * 18));
         }
+
+        // Shield slot
+        addSlotToContainer(new Slot(playerInventory, index++, 10, 141));
 
         // Baubles
         if (baublesInventory != null) {
             index = 0;
             for (int i = 0; i < 4; i++) {
-                addSlotToContainer(new Slot(baublesInventory, index++, 28, 87 + i * 18) {
+                addSlotToContainer(new Slot(baublesInventory, index++, 28, 63 + i * 18) {
                     @Override
                     public boolean isItemValid(ItemStack stack) {
                         return inventory.isItemValidForSlot(getSlotIndex(), stack);

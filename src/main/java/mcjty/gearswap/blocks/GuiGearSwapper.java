@@ -15,6 +15,8 @@ import java.util.List;
 public class GuiGearSwapper extends GuiContainer {
     public static final int WIDTH = 256;
     public static final int HEIGHT = 247;
+    public static final int YSTART = 6;
+    public static final int DY = 18;
 
     private final GearSwapperTE gearSwapperTE;
 
@@ -50,15 +52,15 @@ public class GuiGearSwapper extends GuiContainer {
     }
 
     private boolean isBottomModeSlot(int x, int y) {
-        return x >= 9 && x <= 9+16 && y >= 48 && y <= 48+16;
+        return x >= 9 && x <= 9+16 && y >= YSTART + DY + DY && y <= YSTART + DY + DY+16;
     }
 
     private boolean isMiddleModeslot(int x, int y) {
-        return x >= 9 && x <= 9+16 && y >= 28 && y <= 28+16;
+        return x >= 9 && x <= 9+16 && y >= YSTART + DY && y <= YSTART + DY + 16;
     }
 
     private boolean isTopModeSlot(int x, int y) {
-        return x >= 9 && x <= 9+16 && y >= 8 && y <= 8+16;
+        return x >= 9 && x <= 9+16 && y >= YSTART && y <= YSTART+16;
     }
 
     private void toggleMode(int i) {
@@ -79,7 +81,7 @@ public class GuiGearSwapper extends GuiContainer {
 
         // If needed hide the bauble slots
         if (!GearSwap.baubles) {
-            filledRect(27, 86, 27 + 18, 86 + 18 * 4, 0xffc6c6c6);
+            filledRect(27, 62, 27 + 18, 62 + 18 * 4, 0xffc6c6c6);
             filledRect(86, 5, 86 + 18 * 4, 5 + 18, 0xffc6c6c6);
             filledRect(86, 5 + 39, 86 + 18 * 4, 5 + 39 + 18, 0xffc6c6c6);
             filledRect(86, 5 + 39 * 2, 86 + 18 * 4, 5 + 39 * 2 + 18, 0xffc6c6c6);
@@ -91,11 +93,11 @@ public class GuiGearSwapper extends GuiContainer {
 
     private void drawModes() {
         mc.getTextureManager().bindTexture(guiElements);
-        int y = 8;
+        int y = YSTART;
         for (int i = 0 ; i < 3 ; i++) {
             int u = gearSwapperTE.getExportMode(i) * 16;
             drawTexturedModalRect(guiLeft + 9, guiTop + y, u, 0, 16, 16);
-            y += 20;
+            y += DY;
         }
     }
 
