@@ -5,12 +5,13 @@ import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.Tools;
+import mcjty.lib.inventory.CompatSidedInventory;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,7 +31,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
-public class GearSwapperTE extends TileEntity implements ISidedInventory {
+public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
     // First 4 slots are the ghost slots for the front icons
     // Next there are 4 times 9+4+1 slots for the remembered states.
@@ -67,7 +68,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
         NBTTagList bufferTagList = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0 ; i < bufferTagList.tagCount() ; i++) {
             NBTTagCompound nbtTagCompound = bufferTagList.getCompoundTagAt(i);
-            setStackInSlot(i, ItemStack.loadItemStackFromNBT(nbtTagCompound));
+            setStackInSlot(i, ItemStackTools.loadFromNBT(nbtTagCompound));
         }
     }
 
@@ -108,14 +109,14 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
             exportModes[i] = MODE_PLAYERINV;
         }
         markDirty();
-        IBlockState state = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, state, state, 3);
+        IBlockState state = getWorld().getBlockState(pos);
+        getWorld().notifyBlockUpdate(pos, state, state, 3);
     }
 
     public void setFaceIconSlot(int index, ItemStack stack) {
         setInventorySlotContents(index, stack);
-        IBlockState state = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, state, state, 3);
+        IBlockState state = getWorld().getBlockState(pos);
+        getWorld().notifyBlockUpdate(pos, state, state, 3);
     }
 
     // Get total player inventory count. This is 9+4+1 (hotbar+armor+shield) without baubles
@@ -177,10 +178,9 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack stack = getStackFromPlayerInventory(i, player);
-            if (stack != null && stack.stackSize == 0) {
-                // For some weird reason it seems baubles can have a 0 stacksize?
-                stack = stack.copy();
-                stack.stackSize = 1;
+            if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) == 0) {
+                // For some weird reason it seems baubles can have a 0 stacksize? (can't happen on 1.11)
+                stack = ItemStackTools.safeCopy(stack);
             }
             setInventorySlotContents(getInternalInventoryIndex(index, i), stack);
         }
@@ -257,8 +257,8 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
         // Finally it is possible that some items could not be placed anywhere.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             if (currentStacks[i] != null) {
-                EntityItem entityItem = new EntityItem(worldObj, pos.getX(), pos.getY(), pos.getZ(), currentStacks[i]);
-                worldObj.spawnEntityInWorld(entityItem);
+                EntityItem entityItem = new EntityItem(getWorld(), pos.getX(), pos.getY(), pos.getZ(), currentStacks[i]);
+                getWorld().spawnEntityInWorld(entityItem);
             }
         }
 
@@ -279,12 +279,12 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
                     if (left == 0) {
                         return true;
                     }
-                    item.stackSize = left;
+                    ItemStackTools.setStackSize(item, left);
                     break;
                 }
                 case MODE_REMOTEINV:
                     for (EnumFacing facing : EnumFacing.values()) {
-                        TileEntity te = worldObj.getTileEntity(pos.offset(facing));
+                        TileEntity te = getWorld().getTileEntity(pos.offset(facing));
                         if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
                             IItemHandler capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
                             ItemStack stack = ItemHandlerHelper.insertItem(capability, item, false);
@@ -299,7 +299,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
                             if (left == 0) {
                                 return true;
                             }
-                            item.stackSize = left;
+                            ItemStackTools.setStackSize(item, left);
                         }
                     }
                     break;
@@ -310,13 +310,9 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
     private ItemStack findBestMatchingStack(ItemStack desired, ItemStack[] currentStacks, InventoryPlayer inventoryPlayer) {
         ItemStack bestSoFar = null;
-        desired = desired.copy();
-        // Correct for 0 stackSize which seems to be needed in some cases.
-        if (desired.stackSize == 0) {
-            desired.stackSize = 1;
-        }
+        desired = ItemStackTools.safeCopy(desired);
 
-        while (desired.stackSize > 0) {
+        while (ItemStackTools.isValid(desired)) {
             ItemStack stack = findBestMatchingStackWithScore(desired, currentStacks, inventoryPlayer, bestSoFar);
             if (stack == null) {
                 return bestSoFar;
@@ -324,9 +320,9 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
             if (bestSoFar == null) {
                 bestSoFar = stack;
             } else {
-                bestSoFar.stackSize += stack.stackSize;
+                ItemStackTools.incStackSize(bestSoFar, ItemStackTools.getStackSize(stack));
             }
-            desired.stackSize -= stack.stackSize;
+            ItemStackTools.incStackSize(desired, -ItemStackTools.getStackSize(stack));
         }
         return bestSoFar;
     }
@@ -373,14 +369,14 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
         // Check external inventories.
         for (EnumFacing facing : EnumFacing.values()) {
-            TileEntity te = worldObj.getTileEntity(pos.offset(facing));
+            TileEntity te = getWorld().getTileEntity(pos.offset(facing));
             if (te instanceof IInventory) {
                 findBestMatchingStackWithScore(desired, new ExternalInventorySource((IInventory) te, facing), bestScore, bestMatch);
             }
         }
 
         if (bestScore.source != null) {
-            return bestScore.source.extractAmount(bestScore.index, desired.stackSize);
+            return bestScore.source.extractAmount(bestScore.index, ItemStackTools.getStackSize(desired));
         }
         return null;
     }
@@ -489,23 +485,22 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
 
         if (isGhostSlot(index)) {
             ItemStack old = stacks[index];
-            stacks[index] = null;
+            stacks[index] = ItemStackTools.getEmptyStack();
             if (old == null) {
                 return null;
             }
-            old.stackSize = 0;
-            return old;
+            return ItemStackTools.setStackSize(old, 0);
         } else {
             if (stacks[index] != null) {
-                if (stacks[index].stackSize <= amount) {
+                if (ItemStackTools.getStackSize(stacks[index]) <= amount) {
                     ItemStack old = stacks[index];
                     stacks[index] = null;
                     markDirty();
                     return old;
                 }
                 ItemStack its = stacks[index].splitStack(amount);
-                if (stacks[index].stackSize == 0) {
-                    stacks[index] = null;
+                if (!ItemStackTools.isValid(stacks[index])) {
+                    stacks[index] = ItemStackTools.getEmptyStack();
                 }
                 markDirty();
                 return its;
@@ -528,15 +523,15 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
         }
 
         if (isGhostSlot(index)) {
-            if (stack != null) {
+            if (ItemStackTools.isValid(stack)) {
                 stacks[index] = stack.copy();
             } else {
-                stacks[index] = null;
+                stacks[index] = ItemStackTools.getEmptyStack();
             }
         } else {
             stacks[index] = stack;
-            if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-                stack.stackSize = getInventoryStackLimit();
+            if (stack != null && ItemStackTools.getStackSize(stack) > getInventoryStackLimit()) {
+                ItemStackTools.setStackSize(stack, getInventoryStackLimit());
             }
         }
         markDirty();

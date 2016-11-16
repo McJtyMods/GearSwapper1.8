@@ -1,5 +1,6 @@
 package mcjty.gearswap.blocks;
 
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.item.ItemStack;
 
 class InternalSource implements Source {
@@ -22,10 +23,10 @@ class InternalSource implements Source {
     @Override
     public ItemStack extractAmount(int index, int amount) {
         ItemStack current = gearSwapperTE.getStackInSlot(index + GearSwapperTE.SLOT_BUFFER);
-        if (amount < current.stackSize) {
+        if (amount < ItemStackTools.getStackSize(current)) {
             current = gearSwapperTE.decrStackSize(index + GearSwapperTE.SLOT_BUFFER, amount);
         } else {
-            gearSwapperTE.setInventorySlotContents(index + GearSwapperTE.SLOT_BUFFER, null);
+            gearSwapperTE.setInventorySlotContents(index + GearSwapperTE.SLOT_BUFFER, ItemStackTools.getEmptyStack());
         }
         return current;
     }

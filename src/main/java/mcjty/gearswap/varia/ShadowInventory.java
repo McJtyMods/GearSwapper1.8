@@ -2,6 +2,8 @@ package mcjty.gearswap.varia;
 
 //import codechicken.lib.inventory.InventoryUtils;
 
+import mcjty.lib.inventory.CompatInventory;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -12,7 +14,7 @@ import net.minecraft.util.text.ITextComponent;
  * It is used to solve some problems with the baubles api (the
  * inventory misbehaving).
  */
-public class ShadowInventory implements IInventory {
+public class ShadowInventory implements CompatInventory {
     private final ItemStack[] items;
     private final IInventory master;
 
@@ -41,15 +43,15 @@ public class ShadowInventory implements IInventory {
 
     public static ItemStack decrStackSize(IInventory inv, int slot, int size) {
         ItemStack item = inv.getStackInSlot(slot);
-        if(item != null) {
-            if(item.stackSize <= size) {
-                inv.setInventorySlotContents(slot, null);
+        if(ItemStackTools.isValid(item)) {
+            if(ItemStackTools.getStackSize(item) <= size) {
+                inv.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
                 inv.markDirty();
                 return item;
             } else {
                 ItemStack itemstack1 = item.splitStack(size);
-                if(item.stackSize == 0) {
-                    inv.setInventorySlotContents(slot, null);
+                if(!ItemStackTools.isValid(item)) {
+                    inv.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
                 } else {
                     inv.setInventorySlotContents(slot, item);
                 }

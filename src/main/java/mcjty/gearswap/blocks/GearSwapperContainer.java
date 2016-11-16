@@ -3,14 +3,13 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.ShadowInventory;
 import mcjty.gearswap.varia.Tools;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 public class GearSwapperContainer extends Container {
     private IInventory playerInventory;
@@ -22,7 +21,7 @@ public class GearSwapperContainer extends Container {
         gearInventory = gearSwapperTE;
 
         baublesInventory = Tools.getBaubles(player);
-        if (baublesInventory != null && Tools.WhoAmI.whoAmI(player.worldObj) == Tools.WhoAmI.SPCLIENT) {
+        if (baublesInventory != null && Tools.WhoAmI.whoAmI(player.getEntityWorld()) == Tools.WhoAmI.SPCLIENT) {
             baublesInventory = new ShadowInventory(baublesInventory);
         }
 
@@ -134,8 +133,8 @@ public class GearSwapperContainer extends Container {
                 return null;
             }
 
-            if (origStack.stackSize == 0) {
-                slot.putStack(null);
+            if (!ItemStackTools.isValid(origStack)) {
+                slot.putStack(ItemStackTools.getEmptyStack());
             } else {
                 slot.onSlotChanged();
             }
@@ -144,7 +143,6 @@ public class GearSwapperContainer extends Container {
         return itemstack;
     }
 
-    @Nullable
     @Override
     public ItemStack slotClick(int index, int dragType, ClickType clickTypeIn, EntityPlayer player) {
         if (gearInventory.isGhostSlot(index)) {

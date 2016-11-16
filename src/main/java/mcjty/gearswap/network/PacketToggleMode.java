@@ -46,7 +46,7 @@ public class PacketToggleMode implements IMessage {
 
         private void handle(PacketToggleMode message, MessageContext ctx) {
             EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
-            TileEntity te = playerEntity.worldObj.getTileEntity(message.pos);
+            TileEntity te = playerEntity.getEntityWorld().getTileEntity(message.pos);
             if (te instanceof GearSwapperTE) {
                 GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
                 gearSwapperTE.toggelExportMode(message.index);

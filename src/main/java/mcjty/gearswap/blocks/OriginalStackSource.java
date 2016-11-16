@@ -1,5 +1,6 @@
 package mcjty.gearswap.blocks;
 
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.item.ItemStack;
 
 class OriginalStackSource implements Source {
@@ -22,12 +23,12 @@ class OriginalStackSource implements Source {
     @Override
     public ItemStack extractAmount(int index, int amount) {
         ItemStack current = currentStacks[index];
-        if (amount < current.stackSize) {
+        if (amount < ItemStackTools.getStackSize(current)) {
             current = current.copy();
-            currentStacks[index].stackSize -= amount;
-            current.stackSize = amount;
+            ItemStackTools.incStackSize(currentStacks[index], -amount);
+            current = ItemStackTools.setStackSize(current, amount);
         } else {
-            currentStacks[index] = null;
+            currentStacks[index] = ItemStackTools.getEmptyStack();
         }
         return current;
     }

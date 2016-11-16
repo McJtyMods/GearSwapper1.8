@@ -10,6 +10,8 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcjty.lib.block.CompatBlock;
+import mcjty.lib.tools.ChatTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -44,7 +46,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GearSwapperBlock extends Block implements ITileEntityProvider, WailaInfoProvider, TOPInfoProvider {
+public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider, WailaInfoProvider, TOPInfoProvider {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public GearSwapperBlock(Material material, String blockName) {
@@ -69,6 +71,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
         return new GearSwapperTE();
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean whatIsThis) {
         list.add("This block can remember four different sets of tools, weapons");
@@ -136,7 +139,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float sx, float sy, float sz) {
+    protected boolean clOnBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float sx, float sy, float sz) {
         if (!world.isRemote) {
             EnumFacing k = getOrientation(world, pos);
             if (side == k) {
@@ -151,7 +154,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
                     }
 
                     gearSwapperTE.restoreSetup(index, player);
-                    player.addChatComponentMessage(new TextComponentString(TextFormatting.YELLOW + "Restored hotbar and armor"));
+                    ChatTools.addChatMessage(player, new TextComponentString(TextFormatting.YELLOW + "Restored hotbar and armor"));
                 }
             } else {
                 player.openGui(GearSwap.instance, GearSwap.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());

@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = GearSwap.MODID, name="Gear Swapper", dependencies =
-        "required-after:Forge@["+ GearSwap.MIN_FORGE_VER+",)",
+@Mod(modid = GearSwap.MODID, name="Gear Swapper",
+//        dependencies = "required-after:Forge@["+ GearSwap.MIN_FORGE_VER+",)",
         version = GearSwap.VERSION)
 public class GearSwap {
     public static final String MODID = "gearswap";

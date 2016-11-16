@@ -1,13 +1,13 @@
 package baubles.api.inv;
 
 import baubles.api.cap.IBaublesItemHandler;
+import mcjty.lib.inventory.CompatInventory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
-public class BaublesInventoryWrapper implements IInventory {
+public class BaublesInventoryWrapper implements CompatInventory {
 	
 	final IBaublesItemHandler handler;	
 
@@ -102,5 +102,4 @@ public class BaublesInventoryWrapper implements IInventory {
 			this.setInventorySlotContents(i, null);
         }
 	}
-
 }

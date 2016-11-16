@@ -1,5 +1,6 @@
 package mcjty.gearswap.varia;
 
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -33,14 +34,14 @@ public class InventoryHelper {
         int k = start;
 
         ItemStack itemstack1;
-        int itemsToPlace = result.stackSize;
+        int itemsToPlace = ItemStackTools.getStackSize(result);
 
         if (result.isStackable()) {
             while (itemsToPlace > 0 && (k < stop)) {
                 itemstack1 = inventory.getStackInSlot(k);
 
                 if (isItemStackConsideredEqual(result, itemstack1) && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
-                    int l = itemstack1.stackSize + itemsToPlace;
+                    int l = ItemStackTools.getStackSize(itemstack1) + itemsToPlace;
 
                     if (l <= result.getMaxStackSize()) {
                         if (undo != null) {
@@ -50,16 +51,16 @@ public class InventoryHelper {
                             }
                         }
                         itemsToPlace = 0;
-                        itemstack1.stackSize = l;
+                        ItemStackTools.setStackSize(itemstack1, l);
                         inventory.markDirty();
-                    } else if (itemstack1.stackSize < result.getMaxStackSize()) {
+                    } else if (ItemStackTools.getStackSize(itemstack1) < result.getMaxStackSize()) {
                         if (undo != null) {
                             if (!undo.containsKey(k)) {
                                 undo.put(k, itemstack1.copy());
                             }
                         }
-                        itemsToPlace -= result.getMaxStackSize() - itemstack1.stackSize;
-                        itemstack1.stackSize = result.getMaxStackSize();
+                        itemsToPlace -= result.getMaxStackSize() - ItemStackTools.getStackSize(itemstack1);
+                        ItemStackTools.setStackSize(itemstack1, result.getMaxStackSize());
                         inventory.markDirty();
                     }
                 }
@@ -81,7 +82,7 @@ public class InventoryHelper {
                         }
                     }
                     ItemStack copy = result.copy();
-                    copy.stackSize = itemsToPlace;
+                    ItemStackTools.setStackSize(copy, itemsToPlace);
                     inventory.setInventorySlotContents(k, copy);
                     inventory.markDirty();
                     itemsToPlace = 0;
