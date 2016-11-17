@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "gearswap:items/emptyItem"
+        "layer0": "gearswap:items/emptyitem"
     },
     "display": {
         "thirdperson": {
