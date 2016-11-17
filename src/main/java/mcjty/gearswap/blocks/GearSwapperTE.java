@@ -149,7 +149,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
                 return baubles.getStackInSlot(index - (9+4+1));
             }
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     private void putStackInPlayerInventory(int index, EntityPlayer player, ItemStack stack) {
@@ -199,7 +199,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         // Find stacks in all possible sources to replace the current selection
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack desiredStack = getStackInSlot(getInternalInventoryIndex(index, i));
-            if (desiredStack == null || desiredStack.getItem() == ModItems.forceEmptyItem) {
+            if ((ItemStackTools.isEmpty(desiredStack))|| desiredStack.getItem() == ModItems.forceEmptyItem) {
                 // Either we don't have specific needs for this slot or we want it to be cleared.
                 // In both cases we keep the slot empty here.
             } else {
@@ -214,14 +214,14 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         // our dummy item so that we don't accidently overwrite that in the next step.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack stack = getStackFromPlayerInventory(i, player);
-            if (stack == null) {
-                if (currentStacks[i] != null && currentStacks[i].getItem() != ModItems.forceEmptyItem) {
+            if (ItemStackTools.isEmpty(stack)) {
+                if (ItemStackTools.isValid(currentStacks[i]) && currentStacks[i].getItem() != ModItems.forceEmptyItem) {
                     int internalInventoryIndex = getInternalInventoryIndex(index, i);
                     ItemStack desiredStack = getStackInSlot(internalInventoryIndex);
                     // First check if we don't want to force the slot to be empty
-                    if (desiredStack == null || desiredStack.getItem() != ModItems.forceEmptyItem) {
+                    if ((ItemStackTools.isEmpty(desiredStack)) || desiredStack.getItem() != ModItems.forceEmptyItem) {
                         putStackInPlayerInventory(i, player, currentStacks[i]);
-                        currentStacks[i] = null;
+                        currentStacks[i] = ItemStackTools.getEmptyStack();
                     }
                 }
             }
@@ -229,9 +229,9 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
         // All items that we didn't find a place for we need to back somewhere.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
-            if (currentStacks[i] != null) {
+            if (ItemStackTools.isValid(currentStacks[i])) {
                 if (storeItem(inventory, currentStacks[i])) {
-                    currentStacks[i] = null;
+                    currentStacks[i] = ItemStackTools.getEmptyStack();
                 }
             }
         }
@@ -239,24 +239,24 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         // Now we clear the dummy items from our slots.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack stack = getStackFromPlayerInventory(i, player);
-            if (stack != null && stack.getItem() == ModItems.forceEmptyItem) {
-                putStackInPlayerInventory(i, player, null);
+            if (ItemStackTools.isValid(stack) && stack.getItem() == ModItems.forceEmptyItem) {
+                putStackInPlayerInventory(i, player, ItemStackTools.getEmptyStack());
             }
         }
 
         // Now it is possible that some of the items we couldn't place back because the slots in the hotbar
         // were locked. Now that they are unlocked we can try again.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
-            if (currentStacks[i] != null) {
+            if (ItemStackTools.isValid(currentStacks[i])) {
                 if (inventory.addItemStackToInventory(currentStacks[i])) {
-                    currentStacks[i] = null;
+                    currentStacks[i] = ItemStackTools.getEmptyStack();
                 }
             }
         }
 
         // Finally it is possible that some items could not be placed anywhere.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
-            if (currentStacks[i] != null) {
+            if (ItemStackTools.isValid(currentStacks[i])) {
                 EntityItem entityItem = new EntityItem(getWorld(), pos.getX(), pos.getY(), pos.getZ(), currentStacks[i]);
                 getWorld().spawnEntityInWorld(entityItem);
             }
@@ -288,7 +288,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
                         if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
                             IItemHandler capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
                             ItemStack stack = ItemHandlerHelper.insertItem(capability, item, false);
-                            if (stack == null) {
+                            if (ItemStackTools.isEmpty(stack)) {
                                 return true;
                             }
                             item = stack;
@@ -314,7 +314,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
         while (ItemStackTools.isValid(desired)) {
             ItemStack stack = findBestMatchingStackWithScore(desired, currentStacks, inventoryPlayer, bestSoFar);
-            if (!ItemStackTools.isValid(stack)) {
+            if (ItemStackTools.isEmpty(stack)) {
                 return bestSoFar;
             }
             if (ItemStackTools.isValid(bestSoFar)) {
@@ -344,7 +344,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     private void findBestMatchingStackWithScore(ItemStack desired, Source source, BestScore bestScore, ItemStack bestMatch) {
         for (int i = 0 ; i < source.getStackCount() ; i++) {
             ItemStack current = source.getStack(i);
-            if (bestMatch != null && current != null) {
+            if (ItemStackTools.isValid(bestMatch) && ItemStackTools.isValid(current)) {
                 if (!bestMatch.isItemEqual(current)) {
                     continue;
                 }
@@ -384,7 +384,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
 
     private int calculateMatchingScore(ItemStack desired, ItemStack current) {
-        if (current == null) {
+        if (ItemStackTools.isEmpty(current)) {
             return -1;
         }
 
@@ -461,7 +461,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     @Override
     public ItemStack getStackInSlot(int index) {
         if (index >= stacks.length) {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
 
         return stacks[index];
@@ -480,32 +480,32 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     @Override
     public ItemStack decrStackSize(int index, int amount) {
         if (index >= stacks.length) {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
 
         if (isGhostSlot(index)) {
             ItemStack old = stacks[index];
             stacks[index] = ItemStackTools.getEmptyStack();
-            if (old == null) {
-                return null;
+            if (ItemStackTools.isEmpty(old)) {
+                return ItemStackTools.getEmptyStack();
             }
             return ItemStackTools.setStackSize(old, 0);
         } else {
-            if (stacks[index] != null) {
+            if (ItemStackTools.isValid(stacks[index])) {
                 if (ItemStackTools.getStackSize(stacks[index]) <= amount) {
                     ItemStack old = stacks[index];
-                    stacks[index] = null;
+                    stacks[index] = ItemStackTools.getEmptyStack();
                     markDirty();
                     return old;
                 }
                 ItemStack its = stacks[index].splitStack(amount);
-                if (!ItemStackTools.isValid(stacks[index])) {
+                if (ItemStackTools.isEmpty(stacks[index])) {
                     stacks[index] = ItemStackTools.getEmptyStack();
                 }
                 markDirty();
                 return its;
             }
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 
@@ -530,7 +530,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
             }
         } else {
             stacks[index] = stack;
-            if (stack != null && ItemStackTools.getStackSize(stack) > getInventoryStackLimit()) {
+            if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit()) {
                 ItemStackTools.setStackSize(stack, getInventoryStackLimit());
             }
         }
@@ -574,7 +574,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override

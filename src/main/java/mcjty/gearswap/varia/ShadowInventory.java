@@ -50,7 +50,7 @@ public class ShadowInventory implements CompatInventory {
                 return item;
             } else {
                 ItemStack itemstack1 = item.splitStack(size);
-                if(!ItemStackTools.isValid(item)) {
+                if(ItemStackTools.isEmpty(item)) {
                     inv.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
                 } else {
                     inv.setInventorySlotContents(slot, item);
