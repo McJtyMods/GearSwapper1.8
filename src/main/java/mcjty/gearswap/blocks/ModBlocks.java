@@ -14,6 +14,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
+    public static final String GEAR_SWAPPER_WOOD = "gearSwapperWood";
+    public static final String GEAR_SWAPPER_IRON = "gearSwapperIron";
+    public static final String GEAR_SWAPPER_LAPIS = "gearSwapperLapis";
+    public static final String GEAR_SWAPPER_STONE = "gearSwapperStone";
+    public static final String GEAR_SWAPPER_GLASS = "gearSwapperGlass";
+
     public static GearSwapperBlock woodenGearSwapperBlock;
     public static GearSwapperBlock ironGearSwapperBlock;
     public static GearSwapperBlock lapisGearSwapperBlock;
@@ -22,11 +28,11 @@ public class ModBlocks {
     public static GearSwapperGlassBlock glassGearSwapperBlock;
 
     public static void init() {
-        woodenGearSwapperBlock = new GearSwapperBlock(Material.WOOD, "gearSwapperWood");
-        ironGearSwapperBlock = new GearSwapperBlock(Material.IRON, "gearSwapperIron");
-        lapisGearSwapperBlock = new GearSwapperBlock(Material.ROCK, "gearSwapperLapis");
-        stoneGearSwapperBlock = new GearSwapperBlock(Material.ROCK, "gearSwapperStone");
-        glassGearSwapperBlock = new GearSwapperGlassBlock(Material.GLASS, "gearSwapperGlass");
+        woodenGearSwapperBlock = new GearSwapperBlock(Material.WOOD, GEAR_SWAPPER_WOOD);
+        ironGearSwapperBlock = new GearSwapperBlock(Material.IRON, GEAR_SWAPPER_IRON);
+        lapisGearSwapperBlock = new GearSwapperBlock(Material.ROCK, GEAR_SWAPPER_LAPIS);
+        stoneGearSwapperBlock = new GearSwapperBlock(Material.ROCK, GEAR_SWAPPER_STONE);
+        glassGearSwapperBlock = new GearSwapperGlassBlock(Material.GLASS, GEAR_SWAPPER_GLASS);
 
         if (!Config.customBlockName.isEmpty()) {
             Block b = Block.REGISTRY.getObject(new ResourceLocation(Config.customBlockName));

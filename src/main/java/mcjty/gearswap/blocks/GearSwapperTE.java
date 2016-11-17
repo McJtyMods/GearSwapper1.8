@@ -309,18 +309,18 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     }
 
     private ItemStack findBestMatchingStack(ItemStack desired, ItemStack[] currentStacks, InventoryPlayer inventoryPlayer) {
-        ItemStack bestSoFar = null;
+        ItemStack bestSoFar = ItemStackTools.getEmptyStack();
         desired = ItemStackTools.safeCopy(desired);
 
         while (ItemStackTools.isValid(desired)) {
             ItemStack stack = findBestMatchingStackWithScore(desired, currentStacks, inventoryPlayer, bestSoFar);
-            if (stack == null) {
+            if (!ItemStackTools.isValid(stack)) {
                 return bestSoFar;
             }
-            if (bestSoFar == null) {
-                bestSoFar = stack;
-            } else {
+            if (ItemStackTools.isValid(bestSoFar)) {
                 ItemStackTools.incStackSize(bestSoFar, ItemStackTools.getStackSize(stack));
+            } else {
+                bestSoFar = stack;
             }
             ItemStackTools.incStackSize(desired, -ItemStackTools.getStackSize(stack));
         }
@@ -378,7 +378,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         if (bestScore.source != null) {
             return bestScore.source.extractAmount(bestScore.index, ItemStackTools.getStackSize(desired));
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
 

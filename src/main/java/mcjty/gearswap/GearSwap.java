@@ -1,14 +1,18 @@
 package mcjty.gearswap;
 
+import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.compat.MainCompatHandler;
+import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.proxy.CommonProxy;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
@@ -79,4 +83,29 @@ public class GearSwap {
         }
     }
 
+    @Mod.EventHandler
+    public void onMissingMapping(FMLMissingMappingsEvent event) {
+        logger.info("Repairing missing mappings");
+        for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
+            String resourcePath = mapping.resourceLocation.getResourcePath().toLowerCase();
+            if (mapping.type == GameRegistry.Type.BLOCK) {
+                if (ModBlocks.GEAR_SWAPPER_GLASS.equals(resourcePath)) {
+                    mapping.remap(ModBlocks.glassGearSwapperBlock);
+                } else if (ModBlocks.GEAR_SWAPPER_IRON.equals(resourcePath)) {
+                    mapping.remap(ModBlocks.ironGearSwapperBlock);
+                } else if (ModBlocks.GEAR_SWAPPER_LAPIS.equals(resourcePath)) {
+                    mapping.remap(ModBlocks.lapisGearSwapperBlock);
+                } else if (ModBlocks.GEAR_SWAPPER_STONE.equals(resourcePath)) {
+                    mapping.remap(ModBlocks.stoneGearSwapperBlock);
+                } else if (ModBlocks.GEAR_SWAPPER_WOOD.equals(resourcePath)) {
+                    mapping.remap(ModBlocks.woodenGearSwapperBlock);
+                }
+            } else if (mapping.type == GameRegistry.Type.ITEM) {
+                if ("emptyItem".equals(resourcePath)) {
+                    mapping.remap(ModItems.forceEmptyItem);
+                }
+            }
+        }
+
+    }
 }
