@@ -14,7 +14,7 @@ public class ForceEmptyItem extends Item implements IBauble {
     public ForceEmptyItem() {
         setMaxStackSize(1);
         setUnlocalizedName("emptyitem");
-        setRegistryName("emptyItem");
+        setRegistryName("emptyitem");
         GameRegistry.register(this);
     }
 

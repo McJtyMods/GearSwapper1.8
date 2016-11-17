@@ -51,7 +51,7 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
 
     public GearSwapperBlock(Material material, String blockName) {
         super(material);
-        setUnlocalizedName(blockName.toLowerCase());
+        setUnlocalizedName(blockName);
         setRegistryName(blockName);
         setHardness(2.0f);
         setHarvestLevel("pickaxe", 0);

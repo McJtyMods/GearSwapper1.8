@@ -14,11 +14,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
-    public static final String GEAR_SWAPPER_WOOD = "gearSwapperWood";
-    public static final String GEAR_SWAPPER_IRON = "gearSwapperIron";
-    public static final String GEAR_SWAPPER_LAPIS = "gearSwapperLapis";
-    public static final String GEAR_SWAPPER_STONE = "gearSwapperStone";
-    public static final String GEAR_SWAPPER_GLASS = "gearSwapperGlass";
+    public static final String GEAR_SWAPPER_WOOD = "gearswapperwood";
+    public static final String GEAR_SWAPPER_IRON = "gearswapperiron";
+    public static final String GEAR_SWAPPER_LAPIS = "gearswapperlapis";
+    public static final String GEAR_SWAPPER_STONE = "gearswapperstone";
+    public static final String GEAR_SWAPPER_GLASS = "gearswapperglass";
 
     public static GearSwapperBlock woodenGearSwapperBlock;
     public static GearSwapperBlock ironGearSwapperBlock;

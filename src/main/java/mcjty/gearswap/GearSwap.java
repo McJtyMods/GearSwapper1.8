@@ -4,6 +4,7 @@ import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.compat.MainCompatHandler;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.proxy.CommonProxy;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -102,8 +103,18 @@ public class GearSwap {
                     mapping.remap(ModBlocks.woodenGearSwapperBlock);
                 }
             } else if (mapping.type == GameRegistry.Type.ITEM) {
-                if ("emptyItem".equals(resourcePath)) {
+                if ("emptyitem".equals(resourcePath)) {
                     mapping.remap(ModItems.forceEmptyItem);
+                } else if (ModBlocks.GEAR_SWAPPER_GLASS.equals(resourcePath)) {
+                    mapping.remap(Item.getItemFromBlock(ModBlocks.glassGearSwapperBlock));
+                } else if (ModBlocks.GEAR_SWAPPER_IRON.equals(resourcePath)) {
+                    mapping.remap(Item.getItemFromBlock(ModBlocks.ironGearSwapperBlock));
+                } else if (ModBlocks.GEAR_SWAPPER_LAPIS.equals(resourcePath)) {
+                    mapping.remap(Item.getItemFromBlock(ModBlocks.lapisGearSwapperBlock));
+                } else if (ModBlocks.GEAR_SWAPPER_STONE.equals(resourcePath)) {
+                    mapping.remap(Item.getItemFromBlock(ModBlocks.stoneGearSwapperBlock));
+                } else if (ModBlocks.GEAR_SWAPPER_WOOD.equals(resourcePath)) {
+                    mapping.remap(Item.getItemFromBlock(ModBlocks.woodenGearSwapperBlock));
                 }
             }
         }
