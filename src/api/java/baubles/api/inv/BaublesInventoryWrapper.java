@@ -67,7 +67,7 @@ public class BaublesInventoryWrapper implements CompatInventory {
 	public void markDirty() {	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsable(EntityPlayer player) {
 		return true;
 	}
 

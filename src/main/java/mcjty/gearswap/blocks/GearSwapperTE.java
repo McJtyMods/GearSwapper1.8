@@ -7,6 +7,7 @@ import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.Tools;
 import mcjty.lib.inventory.CompatSidedInventory;
 import mcjty.lib.tools.ItemStackTools;
+import mcjty.lib.tools.WorldTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -258,7 +259,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             if (ItemStackTools.isValid(currentStacks[i])) {
                 EntityItem entityItem = new EntityItem(getWorld(), pos.getX(), pos.getY(), pos.getZ(), currentStacks[i]);
-                getWorld().spawnEntityInWorld(entityItem);
+                WorldTools.spawnEntity(getWorld(), entityItem);
             }
         }
 
@@ -543,7 +544,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsable(EntityPlayer player) {
         return true;
     }
 
