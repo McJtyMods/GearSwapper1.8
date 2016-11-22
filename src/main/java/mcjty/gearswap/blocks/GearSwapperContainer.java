@@ -105,10 +105,11 @@ public class GearSwapperContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        if (!playerInventory.isUseableByPlayer(player)) {
-            return false;
-        }
-        if (!gearInventory.isUseableByPlayer(player)) {
+        // @todo @@@@@@@@@@@@@
+//        if (!playerInventory.isUseableByPlayer(player)) {
+//            return false;
+//        }
+        if (!gearInventory.isUsable(player)) {
             return false;
         }
         return true;
