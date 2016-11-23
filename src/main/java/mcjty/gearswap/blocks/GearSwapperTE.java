@@ -5,7 +5,7 @@ import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.Tools;
-import mcjty.lib.inventory.CompatSidedInventory;
+import mcjty.lib.compat.CompatSidedInventory;
 import mcjty.lib.tools.ItemStackTools;
 import mcjty.lib.tools.WorldTools;
 import net.minecraft.block.state.IBlockState;

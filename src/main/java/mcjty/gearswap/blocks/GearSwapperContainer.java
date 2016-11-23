@@ -3,7 +3,6 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.ShadowInventory;
 import mcjty.gearswap.varia.Tools;
-import mcjty.lib.inventory.InventoryTools;
 import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -106,10 +105,11 @@ public class GearSwapperContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        if (!InventoryTools.isUsable(player, playerInventory)) {
-            return false;
-        }
-        if (!InventoryTools.isUsable(player, gearInventory)) {
+        // @todo @@@@@@@@@@@@@
+//        if (!playerInventory.isUseableByPlayer(player)) {
+//            return false;
+//        }
+        if (!gearInventory.isUsable(player)) {
             return false;
         }
         return true;

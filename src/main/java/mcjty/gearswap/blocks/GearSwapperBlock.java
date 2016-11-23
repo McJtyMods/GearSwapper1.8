@@ -10,7 +10,7 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcjty.lib.block.CompatBlock;
+import mcjty.lib.compat.CompatBlock;
 import mcjty.lib.tools.ChatTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;

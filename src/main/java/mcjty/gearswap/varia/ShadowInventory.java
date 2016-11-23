@@ -2,8 +2,7 @@ package mcjty.gearswap.varia;
 
 //import codechicken.lib.inventory.InventoryUtils;
 
-import mcjty.lib.inventory.CompatInventory;
-import mcjty.lib.inventory.InventoryTools;
+import mcjty.lib.compat.CompatInventory;
 import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -82,7 +81,9 @@ public class ShadowInventory implements CompatInventory {
 
     @Override
     public boolean isUsable(EntityPlayer player) {
-        return InventoryTools.isUsable(player, master);
+        // @todo @@@@@@@@@
+        return true;
+//        return master.isUsable(player);
     }
 
     @Override
