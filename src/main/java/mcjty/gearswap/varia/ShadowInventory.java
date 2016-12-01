@@ -60,7 +60,7 @@ public class ShadowInventory implements CompatInventory {
                 return itemstack1;
             }
         } else {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 
@@ -99,7 +99,7 @@ public class ShadowInventory implements CompatInventory {
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = items[index];
-        items[index] = null;
+        items[index] = ItemStackTools.getEmptyStack();
         return stack;
     }
 

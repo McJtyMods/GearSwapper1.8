@@ -117,21 +117,21 @@ public class GearSwapperContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-        ItemStack itemstack = null;
-        Slot slot = (Slot) this.inventorySlots.get(index);
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
             ItemStack origStack = slot.getStack();
             itemstack = origStack.copy();
 
             if (gearInventory.isGhostSlot(index)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             } else if (gearInventory.isBufferSlot(index)) {
                 if (!this.mergeItemStack(origStack, GearSwapperTE.SLOT_BUFFER + 16, this.inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             } else if (!this.mergeItemStack(origStack, GearSwapperTE.SLOT_BUFFER, GearSwapperTE.SLOT_BUFFER + 16, false)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             if (!ItemStackTools.isValid(origStack)) {
@@ -149,13 +149,13 @@ public class GearSwapperContainer extends Container {
         if (gearInventory.isGhostSlot(index)) {
             Slot slot = getSlot(index);     // Index of slot matches index in gear inventory!
             if (slot.getHasStack()) {
-                slot.putStack(null);
-            } else if (!gearInventory.isIconSlot(index) && player.inventory.getItemStack() == null) {
+                slot.putStack(ItemStackTools.getEmptyStack());
+            } else if (!gearInventory.isIconSlot(index) && ItemStackTools.isEmpty(player.inventory.getItemStack())) {
                 slot.putStack(new ItemStack(ModItems.forceEmptyItem));
             } else {
                 slot.putStack(player.inventory.getItemStack());
             }
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
         return super.slotClick(index, dragType, clickTypeIn, player);
     }

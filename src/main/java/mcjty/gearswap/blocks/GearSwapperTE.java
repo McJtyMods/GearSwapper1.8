@@ -92,7 +92,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         for (int i = 0 ; i < stacks.length ; i++) {
             ItemStack stack = getStackInSlot(i);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            if (stack != null) {
+            if (ItemStackTools.isValid(stack)) {
                 stack.writeToNBT(nbtTagCompound);
             }
             bufferTagList.appendTag(nbtTagCompound);

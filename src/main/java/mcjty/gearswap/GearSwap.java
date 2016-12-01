@@ -20,13 +20,18 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 @Mod(modid = GearSwap.MODID, name="Gear Swapper",
-//        dependencies = "required-after:Forge@["+ GearSwap.MIN_FORGE_VER+",)",
+        dependencies =
+                        "required-after:compatlayer@[" + GearSwap.COMPATLAYER_VER + ",);" +
+                        "after:Forge@[" + GearSwap.MIN_FORGE10_VER + ",);" +
+                        "after:forge@[" + GearSwap.MIN_FORGE11_VER + ",)",
         acceptedMinecraftVersions = "[1.9,1.12)",
         version = GearSwap.VERSION)
 public class GearSwap {
     public static final String MODID = "gearswap";
-    public static final String VERSION = "1.3.0alpha2";
-    public static final String MIN_FORGE_VER = "11.15.0.1600";
+    public static final String VERSION = "1.3.0beta1";
+    public static final String MIN_FORGE10_VER = "11.15.0.1600";
+    public static final String MIN_FORGE11_VER = "13.19.0.2176";
+    public static final String COMPATLAYER_VER = "0.0.39beta";
 
     @SidedProxy(clientSide="mcjty.gearswap.proxy.ClientProxy", serverSide="mcjty.gearswap.proxy.ServerProxy")
     public static CommonProxy proxy;

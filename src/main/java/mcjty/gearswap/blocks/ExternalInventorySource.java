@@ -29,9 +29,9 @@ class ExternalInventorySource implements Source {
         } else {
             sidedInventory = null;
         }
-        if (sidedInventory != null && current != null) {
+        if (sidedInventory != null && ItemStackTools.isValid(current)) {
             if (!sidedInventory.canExtractItem(index, current, direction.getOpposite())) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
         }
         return current;

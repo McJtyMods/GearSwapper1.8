@@ -75,10 +75,10 @@ public class InventoryHelper {
             while (k < stop) {
                 itemstack1 = inventory.getStackInSlot(k);
 
-                if (itemstack1 == null && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
+                if (ItemStackTools.isEmpty(itemstack1) && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
                     if (undo != null) {
                         if (!undo.containsKey(k)) {
-                            undo.put(k, null);
+                            undo.put(k, ItemStackTools.getEmptyStack());
                         }
                     }
                     ItemStack copy = result.copy();
@@ -97,6 +97,6 @@ public class InventoryHelper {
     }
 
     private static boolean isItemStackConsideredEqual(ItemStack result, ItemStack itemstack1) {
-        return itemstack1 != null && itemstack1.getItem() == result.getItem() && (!result.getHasSubtypes() || result.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(result, itemstack1);
+        return ItemStackTools.isValid(itemstack1) && itemstack1.getItem() == result.getItem() && (!result.getHasSubtypes() || result.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(result, itemstack1);
     }
 }
