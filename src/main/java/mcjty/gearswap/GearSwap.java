@@ -28,10 +28,10 @@ import java.io.File;
         version = GearSwap.VERSION)
 public class GearSwap {
     public static final String MODID = "gearswap";
-    public static final String VERSION = "1.3.0beta1";
+    public static final String VERSION = "1.4.0";
     public static final String MIN_FORGE10_VER = "11.15.0.1600";
     public static final String MIN_FORGE11_VER = "13.19.0.2176";
-    public static final String COMPATLAYER_VER = "0.0.39beta";
+    public static final String COMPATLAYER_VER = "0.1.0";
 
     @SidedProxy(clientSide="mcjty.gearswap.proxy.ClientProxy", serverSide="mcjty.gearswap.proxy.ServerProxy")
     public static CommonProxy proxy;

@@ -33,7 +33,7 @@ repositories {
     }
 }
 
-version = "1.11-1.3.0beta1"
+version = "1.1x-1.4.0"
 def ENV = System.getenv()
 if (ENV.DRONE_BUILD_NUMBER) {
     version += ".n" + ENV.DRONE_BUILD_NUMBER
@@ -45,9 +45,9 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.11-13.19.0.2176"
+    version = "1.11-13.19.0.2180"
     runDir = "run"
-    mappings = "snapshot_20161201"
+    mappings = "snapshot_20161205"
     useDepAts = true
 }
 
@@ -55,7 +55,7 @@ dependencies {
     //deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.3-B15_1.11"
     deobfCompile "mezz.jei:jei_1.11:4.0.2.194"
-    deobfCompile "com.github.mcjty:compatlayer:1.11-0.0.39beta"
+    deobfCompile "com.github.mcjty:compatlayer:1.11-0.1.0"
     deobfCompile "mcjty.theoneprobe:TheOneProbe:1.11-1.3.3-46"
 }
 
