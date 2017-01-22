@@ -200,7 +200,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         // Find stacks in all possible sources to replace the current selection
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack desiredStack = getStackInSlot(getInternalInventoryIndex(index, i));
-            if ((ItemStackTools.isEmpty(desiredStack))|| desiredStack.getItem() == ModItems.forceEmptyItem) {
+            if ((ItemStackTools.isEmpty(desiredStack)) || desiredStack.getItem() == ModItems.forceEmptyItem) {
                 // Either we don't have specific needs for this slot or we want it to be cleared.
                 // In both cases we keep the slot empty here.
             } else {
@@ -215,7 +215,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
         // our dummy item so that we don't accidently overwrite that in the next step.
         for (int i = 0 ; i < getPlayerInventorySize() ; i++) {
             ItemStack stack = getStackFromPlayerInventory(i, player);
-            if (ItemStackTools.isEmpty(stack)) {
+            if (ItemStackTools.isEmpty(stack) || stack.getItem() == ModItems.forceEmptyItem) {
                 if (ItemStackTools.isValid(currentStacks[i]) && currentStacks[i].getItem() != ModItems.forceEmptyItem) {
                     int internalInventoryIndex = getInternalInventoryIndex(index, i);
                     ItemStack desiredStack = getStackInSlot(internalInventoryIndex);
