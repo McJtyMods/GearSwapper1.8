@@ -1,11 +1,13 @@
 package mcjty.gearswap.proxy;
 
 import mcjty.gearswap.Config;
+import mcjty.gearswap.ForgeEventHandlers;
 import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.ModCrafting;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.network.PacketHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -18,12 +20,10 @@ public abstract class CommonProxy {
     private Configuration mainConfig;
 
     public void preInit(FMLPreInitializationEvent e) {
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandlers());
+
         mainConfig = GearSwap.config;
         readMainConfig();
-
-        ModItems.init();
-        ModBlocks.init();
-        ModCrafting.init();
 
         PacketHandler.registerMessages("gearswapper");
     }
@@ -53,6 +53,8 @@ public abstract class CommonProxy {
             mainConfig.save();
         }
         mainConfig = null;
+
+        ModCrafting.init();
     }
 
 }

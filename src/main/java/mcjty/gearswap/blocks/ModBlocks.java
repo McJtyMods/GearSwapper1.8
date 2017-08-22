@@ -3,15 +3,8 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
     public static final String GEAR_SWAPPER_WOOD = "gearswapperwood";
@@ -41,25 +34,5 @@ public class ModBlocks {
             }
         }
         GameRegistry.registerTileEntity(GearSwapperTE.class, "gearSwapper");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void initModels() {
-        ClientRegistry.bindTileEntitySpecialRenderer(GearSwapperTE.class, new GearSwapperTESR());
-
-        woodenGearSwapperBlock.initModel();
-        ironGearSwapperBlock.initModel();
-        lapisGearSwapperBlock.initModel();
-        stoneGearSwapperBlock.initModel();
-        glassGearSwapperBlock.initModel();
-        if (!Config.customBlockName.isEmpty()) {
-            Block b = Block.REGISTRY.getObject(new ResourceLocation(Config.customBlockName));
-            if (b != null) {
-                ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-                mesher.register(Item.getItemFromBlock(moddedGearSwapperBlock), 0, new ModelResourceLocation(b.getRegistryName(), "inventory"));
-
-//                moddedGearSwapperBlock.initModel();
-            }
-        }
     }
 }

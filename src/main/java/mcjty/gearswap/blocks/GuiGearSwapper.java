@@ -120,7 +120,7 @@ public class GuiGearSwapper extends GuiContainer {
         if (!tooltips.isEmpty()) {
             x += guiLeft;
             y += guiTop;
-            drawHoveringText(tooltips, x, y, mc.fontRendererObj);
+            drawHoveringText(tooltips, x, y, mc.fontRenderer);
         }
     }
 }

@@ -28,7 +28,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
     private static int yy[] = new int[] { 7, 7, 36, 36 };
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushAttrib();
 
         RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;

@@ -5,14 +5,13 @@ import mcjty.gearswap.compat.top.TOPInfoProvider;
 import mcjty.gearswap.compat.waila.WailaInfoProvider;
 import mcjty.gearswap.network.PacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
+import mcjty.lib.compat.CompatBlock;
+import mcjty.lib.tools.ChatTools;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcjty.lib.compat.CompatBlock;
-import mcjty.lib.tools.ChatTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -20,11 +19,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,10 +38,10 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +56,6 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
         setHarvestLevel("pickaxe", 0);
         setCreativeTab(CreativeTabs.MISC);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this), getRegistryName());
     }
 
     @SideOnly(Side.CLIENT)
@@ -71,9 +68,9 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
         return new GearSwapperTE();
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean whatIsThis) {
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> list, ITooltipFlag advanced) {
         list.add("This block can remember four different sets of tools, weapons");
         list.add("and armor and allows you to quickly switch between them.");
         list.add("Sneak-left-click to store current hotbar+armor in slot.");
@@ -92,9 +89,9 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
         int z = blockPos.getZ();
         EnumFacing k = getOrientation(world, blockPos);
         if (sideHit == k) {
-            float sx = (float) (hitVec.xCoord - x);
-            float sy = (float) (hitVec.yCoord - y);
-            float sz = (float) (hitVec.zCoord - z);
+            float sx = (float) (hitVec.x - x);
+            float sy = (float) (hitVec.y - y);
+            float sz = (float) (hitVec.z - z);
             return calculateHitIndex(sx, sy, sz, k);
         } else {
             return -1;

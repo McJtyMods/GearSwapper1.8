@@ -1,19 +1,14 @@
 package mcjty.gearswap;
 
-import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.compat.MainCompatHandler;
-import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.proxy.CommonProxy;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
@@ -21,17 +16,13 @@ import java.io.File;
 
 @Mod(modid = GearSwap.MODID, name="Gear Swapper",
         dependencies =
-                        "required-after:compatlayer@[" + GearSwap.COMPATLAYER_VER + ",);" +
-                        "after:Forge@[" + GearSwap.MIN_FORGE10_VER + ",);" +
                         "after:forge@[" + GearSwap.MIN_FORGE11_VER + ",)",
-        acceptedMinecraftVersions = "[1.9,1.12)",
+        acceptedMinecraftVersions = "[1.12,1.13)",
         version = GearSwap.VERSION)
 public class GearSwap {
     public static final String MODID = "gearswap";
     public static final String VERSION = "1.4.1";
-    public static final String MIN_FORGE10_VER = "11.15.0.1600";
     public static final String MIN_FORGE11_VER = "13.19.0.2176";
-    public static final String COMPATLAYER_VER = "0.1.7";
 
     @SidedProxy(clientSide="mcjty.gearswap.proxy.ClientProxy", serverSide="mcjty.gearswap.proxy.ServerProxy")
     public static CommonProxy proxy;
@@ -88,41 +79,5 @@ public class GearSwap {
                 baubles = false;
             }
         }
-    }
-
-    @Mod.EventHandler
-    public void onMissingMapping(FMLMissingMappingsEvent event) {
-        logger.info("Repairing missing mappings");
-        for (FMLMissingMappingsEvent.MissingMapping mapping : event.get()) {
-            String resourcePath = mapping.resourceLocation.getResourcePath().toLowerCase();
-            if (mapping.type == GameRegistry.Type.BLOCK) {
-                if (ModBlocks.GEAR_SWAPPER_GLASS.equals(resourcePath)) {
-                    mapping.remap(ModBlocks.glassGearSwapperBlock);
-                } else if (ModBlocks.GEAR_SWAPPER_IRON.equals(resourcePath)) {
-                    mapping.remap(ModBlocks.ironGearSwapperBlock);
-                } else if (ModBlocks.GEAR_SWAPPER_LAPIS.equals(resourcePath)) {
-                    mapping.remap(ModBlocks.lapisGearSwapperBlock);
-                } else if (ModBlocks.GEAR_SWAPPER_STONE.equals(resourcePath)) {
-                    mapping.remap(ModBlocks.stoneGearSwapperBlock);
-                } else if (ModBlocks.GEAR_SWAPPER_WOOD.equals(resourcePath)) {
-                    mapping.remap(ModBlocks.woodenGearSwapperBlock);
-                }
-            } else if (mapping.type == GameRegistry.Type.ITEM) {
-                if ("emptyitem".equals(resourcePath)) {
-                    mapping.remap(ModItems.forceEmptyItem);
-                } else if (ModBlocks.GEAR_SWAPPER_GLASS.equals(resourcePath)) {
-                    mapping.remap(Item.getItemFromBlock(ModBlocks.glassGearSwapperBlock));
-                } else if (ModBlocks.GEAR_SWAPPER_IRON.equals(resourcePath)) {
-                    mapping.remap(Item.getItemFromBlock(ModBlocks.ironGearSwapperBlock));
-                } else if (ModBlocks.GEAR_SWAPPER_LAPIS.equals(resourcePath)) {
-                    mapping.remap(Item.getItemFromBlock(ModBlocks.lapisGearSwapperBlock));
-                } else if (ModBlocks.GEAR_SWAPPER_STONE.equals(resourcePath)) {
-                    mapping.remap(Item.getItemFromBlock(ModBlocks.stoneGearSwapperBlock));
-                } else if (ModBlocks.GEAR_SWAPPER_WOOD.equals(resourcePath)) {
-                    mapping.remap(Item.getItemFromBlock(ModBlocks.woodenGearSwapperBlock));
-                }
-            }
-        }
-
     }
 }
