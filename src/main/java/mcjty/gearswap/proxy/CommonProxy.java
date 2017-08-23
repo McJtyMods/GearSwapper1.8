@@ -25,6 +25,9 @@ public abstract class CommonProxy {
         mainConfig = GearSwap.config;
         readMainConfig();
 
+        ModBlocks.init();
+        ModItems.init();
+
         PacketHandler.registerMessages("gearswapper");
     }
 

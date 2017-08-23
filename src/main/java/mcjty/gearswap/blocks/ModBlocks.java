@@ -33,6 +33,5 @@ public class ModBlocks {
                 moddedGearSwapperBlock = new GearSwapperBlock(Material.ROCK, "gearSwapperModded");
             }
         }
-        GameRegistry.registerTileEntity(GearSwapperTE.class, "gearSwapper");
     }
 }

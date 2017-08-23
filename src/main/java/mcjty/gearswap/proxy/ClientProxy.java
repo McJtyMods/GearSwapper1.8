@@ -39,7 +39,7 @@ public class ClientProxy extends CommonProxy {
 
 
     @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent event) {
+    public void registerModels(ModelRegistryEvent event) {
         ModBlocks.glassGearSwapperBlock.initModel();
         ModBlocks.ironGearSwapperBlock.initModel();
         ModBlocks.lapisGearSwapperBlock.initModel();

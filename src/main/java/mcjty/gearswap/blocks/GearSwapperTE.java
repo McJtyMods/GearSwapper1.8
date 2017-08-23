@@ -6,6 +6,7 @@ import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.Tools;
 import mcjty.lib.compat.CompatSidedInventory;
+import mcjty.lib.tools.ItemStackList;
 import mcjty.lib.tools.ItemStackTools;
 import mcjty.lib.tools.WorldTools;
 import net.minecraft.block.state.IBlockState;
@@ -38,7 +39,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     // Next there are 4 times 9+4+1 slots for the remembered states.
     // Then there are 16 slots general inventory.
     // Then we optionally have 4*4 slots for baubles.
-    private ItemStack stacks[] = new ItemStack[4 + 4*(9+4+1) + 16 + 4*4 + 4];
+    private ItemStackList stacks = ItemStackList.create(4 + 4*(9+4+1) + 16 + 4*4 + 4);
 
     public static final int SLOT_GHOST = 4;
     public static final int SLOT_BUFFER = SLOT_GHOST + 4*(9+4+1);
@@ -89,7 +90,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
     private void writeBufferToNBT(NBTTagCompound tagCompound) {
         NBTTagList bufferTagList = new NBTTagList();
-        for (int i = 0 ; i < stacks.length ; i++) {
+        for (int i = 0 ; i < stacks.size() ; i++) {
             ItemStack stack = getStackInSlot(i);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
             if (ItemStackTools.isValid(stack)) {
@@ -456,16 +457,16 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
     @Override
     public int getSizeInventory() {
-        return stacks.length;
+        return stacks.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        if (index >= stacks.length) {
+        if (index >= stacks.size()) {
             return ItemStackTools.getEmptyStack();
         }
 
-        return stacks[index];
+        return stacks.get(index);
     }
 
     public boolean isGhostSlot(int index) {
@@ -480,28 +481,28 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
 
     @Override
     public ItemStack decrStackSize(int index, int amount) {
-        if (index >= stacks.length) {
+        if (index >= stacks.size()) {
             return ItemStackTools.getEmptyStack();
         }
 
         if (isGhostSlot(index)) {
-            ItemStack old = stacks[index];
-            stacks[index] = ItemStackTools.getEmptyStack();
+            ItemStack old = stacks.get(index);
+            stacks.set(index, ItemStackTools.getEmptyStack());
             if (ItemStackTools.isEmpty(old)) {
                 return ItemStackTools.getEmptyStack();
             }
             return ItemStackTools.setStackSize(old, 0);
         } else {
-            if (ItemStackTools.isValid(stacks[index])) {
-                if (ItemStackTools.getStackSize(stacks[index]) <= amount) {
-                    ItemStack old = stacks[index];
-                    stacks[index] = ItemStackTools.getEmptyStack();
+            if (ItemStackTools.isValid(stacks.get(index))) {
+                if (ItemStackTools.getStackSize(stacks.get(index)) <= amount) {
+                    ItemStack old = stacks.get(index);
+                    stacks.set(index, ItemStackTools.getEmptyStack());
                     markDirty();
                     return old;
                 }
-                ItemStack its = stacks[index].splitStack(amount);
-                if (ItemStackTools.isEmpty(stacks[index])) {
-                    stacks[index] = ItemStackTools.getEmptyStack();
+                ItemStack its = stacks.get(index).splitStack(amount);
+                if (ItemStackTools.isEmpty(stacks.get(index))) {
+                    stacks.set(index, ItemStackTools.getEmptyStack());
                 }
                 markDirty();
                 return its;
@@ -511,26 +512,26 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     }
 
     public void setStackInSlot(int index, ItemStack stack) {
-        if (index >= stacks.length) {
+        if (index >= stacks.size()) {
             return;
         }
-        stacks[index] = stack;
+        stacks.set(index, stack);
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        if (index >= stacks.length) {
+        if (index >= stacks.size()) {
             return;
         }
 
         if (isGhostSlot(index)) {
             if (ItemStackTools.isValid(stack)) {
-                stacks[index] = stack.copy();
+                stacks.set(index, stack.copy());
             } else {
-                stacks[index] = ItemStackTools.getEmptyStack();
+                stacks.set(index, ItemStackTools.getEmptyStack());
             }
         } else {
-            stacks[index] = stack;
+            stacks.set(index, stack);
             if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit()) {
                 ItemStackTools.setStackSize(stack, getInventoryStackLimit());
             }
@@ -636,7 +637,7 @@ public class GearSwapperTE extends TileEntity implements CompatSidedInventory {
     @Override
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) invHandler;
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invHandler);
         }
         return super.getCapability(capability, facing);
     }
