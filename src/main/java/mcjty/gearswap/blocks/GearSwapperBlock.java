@@ -5,13 +5,12 @@ import mcjty.gearswap.compat.top.TOPInfoProvider;
 import mcjty.gearswap.compat.waila.WailaInfoProvider;
 import mcjty.gearswap.network.PacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
-import mcjty.lib.compat.CompatBlock;
-import mcjty.lib.tools.ChatTools;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -33,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider, WailaInfoProvider, TOPInfoProvider {
+public class GearSwapperBlock extends Block implements ITileEntityProvider, WailaInfoProvider, TOPInfoProvider {
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
     public GearSwapperBlock(Material material, String blockName) {
@@ -136,7 +136,7 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
     }
 
     @Override
-    protected boolean clOnBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float sx, float sy, float sz) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float sx, float sy, float sz) {
         if (!world.isRemote) {
             EnumFacing k = getOrientation(world, pos);
             if (side == k) {
@@ -151,7 +151,12 @@ public class GearSwapperBlock extends CompatBlock implements ITileEntityProvider
                     }
 
                     gearSwapperTE.restoreSetup(index, player);
-                    ChatTools.addChatMessage(player, new TextComponentString(TextFormatting.YELLOW + "Restored hotbar and armor"));
+                    ITextComponent component = new TextComponentString(TextFormatting.YELLOW + "Restored hotbar and armor");
+                    if (player instanceof EntityPlayer) {
+                        ((EntityPlayer) player).sendStatusMessage(component, false);
+                    } else {
+                        player.sendMessage(component);
+                    }
                 }
             } else {
                 player.openGui(GearSwap.instance, GearSwap.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());

@@ -2,10 +2,11 @@ package mcjty.gearswap.network;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.gearswap.blocks.GearSwapperTE;
-import mcjty.lib.tools.ChatTools;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -53,7 +54,12 @@ public class PacketRememberSetup implements IMessage {
             if (te instanceof GearSwapperTE) {
                 GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
                 gearSwapperTE.rememberSetup(message.index, playerEntity);
-                ChatTools.addChatMessage(playerEntity, new TextComponentString(TextFormatting.YELLOW + "Remembered current hotbar and armor"));
+                ITextComponent component = new TextComponentString(TextFormatting.YELLOW + "Remembered current hotbar and armor");
+                if (playerEntity instanceof EntityPlayer) {
+                    ((EntityPlayer) playerEntity).sendStatusMessage(component, false);
+                } else {
+                    playerEntity.sendMessage(component);
+                }
             }
         }
     }

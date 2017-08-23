@@ -3,7 +3,6 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.varia.ShadowInventory;
 import mcjty.gearswap.varia.Tools;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
@@ -109,7 +108,7 @@ public class GearSwapperContainer extends Container {
 //        if (!playerInventory.isUseableByPlayer(player)) {
 //            return false;
 //        }
-        if (!gearInventory.isUsable(player)) {
+        if (!gearInventory.isUsableByPlayer(player)) {
             return false;
         }
         return true;
@@ -117,7 +116,7 @@ public class GearSwapperContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-        ItemStack itemstack = ItemStackTools.getEmptyStack();
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
@@ -125,17 +124,17 @@ public class GearSwapperContainer extends Container {
             itemstack = origStack.copy();
 
             if (gearInventory.isGhostSlot(index)) {
-                return ItemStackTools.getEmptyStack();
+                return ItemStack.EMPTY;
             } else if (gearInventory.isBufferSlot(index)) {
                 if (!this.mergeItemStack(origStack, GearSwapperTE.SLOT_BUFFER + 16, this.inventorySlots.size(), true)) {
-                    return ItemStackTools.getEmptyStack();
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(origStack, GearSwapperTE.SLOT_BUFFER, GearSwapperTE.SLOT_BUFFER + 16, false)) {
-                return ItemStackTools.getEmptyStack();
+                return ItemStack.EMPTY;
             }
 
-            if (!ItemStackTools.isValid(origStack)) {
-                slot.putStack(ItemStackTools.getEmptyStack());
+            if (!!origStack.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
@@ -149,13 +148,13 @@ public class GearSwapperContainer extends Container {
         if (gearInventory.isGhostSlot(index)) {
             Slot slot = getSlot(index);     // Index of slot matches index in gear inventory!
             if (slot.getHasStack()) {
-                slot.putStack(ItemStackTools.getEmptyStack());
-            } else if (!gearInventory.isIconSlot(index) && ItemStackTools.isEmpty(player.inventory.getItemStack())) {
+                slot.putStack(ItemStack.EMPTY);
+            } else if (!gearInventory.isIconSlot(index) && player.inventory.getItemStack().isEmpty()) {
                 slot.putStack(new ItemStack(ModItems.forceEmptyItem));
             } else {
                 slot.putStack(player.inventory.getItemStack());
             }
-            return ItemStackTools.getEmptyStack();
+            return ItemStack.EMPTY;
         }
         return super.slotClick(index, dragType, clickTypeIn, player);
     }

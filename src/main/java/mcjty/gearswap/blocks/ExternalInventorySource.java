@@ -1,6 +1,5 @@
 package mcjty.gearswap.blocks;
 
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -29,9 +28,9 @@ class ExternalInventorySource implements Source {
         } else {
             sidedInventory = null;
         }
-        if (sidedInventory != null && ItemStackTools.isValid(current)) {
+        if (sidedInventory != null && !current.isEmpty()) {
             if (!sidedInventory.canExtractItem(index, current, direction.getOpposite())) {
-                return ItemStackTools.getEmptyStack();
+                return ItemStack.EMPTY;
             }
         }
         return current;
@@ -40,10 +39,10 @@ class ExternalInventorySource implements Source {
     @Override
     public ItemStack extractAmount(int index, int amount) {
         ItemStack current = otherInventory.getStackInSlot(index);
-        if (amount < ItemStackTools.getStackSize(current)) {
+        if (amount < current.getCount()) {
             current = otherInventory.decrStackSize(index, amount);
         } else {
-            otherInventory.setInventorySlotContents(index, ItemStackTools.getEmptyStack());
+            otherInventory.setInventorySlotContents(index, ItemStack.EMPTY);
         }
         return current;
     }

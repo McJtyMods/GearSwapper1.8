@@ -2,8 +2,6 @@ package mcjty.gearswap.varia;
 
 //import codechicken.lib.inventory.InventoryUtils;
 
-import mcjty.lib.compat.CompatInventory;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -14,7 +12,7 @@ import net.minecraft.util.text.ITextComponent;
  * It is used to solve some problems with the baubles api (the
  * inventory misbehaving).
  */
-public class ShadowInventory implements CompatInventory {
+public class ShadowInventory implements IInventory {
     private final ItemStack[] items;
     private final IInventory master;
 
@@ -43,15 +41,15 @@ public class ShadowInventory implements CompatInventory {
 
     public static ItemStack decrStackSize(IInventory inv, int slot, int size) {
         ItemStack item = inv.getStackInSlot(slot);
-        if(ItemStackTools.isValid(item)) {
-            if(ItemStackTools.getStackSize(item) <= size) {
-                inv.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
+        if(!item.isEmpty()) {
+            if(item.getCount() <= size) {
+                inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                 inv.markDirty();
                 return item;
             } else {
                 ItemStack itemstack1 = item.splitStack(size);
-                if(ItemStackTools.isEmpty(item)) {
-                    inv.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
+                if(item.isEmpty()) {
+                    inv.setInventorySlotContents(slot, ItemStack.EMPTY);
                 } else {
                     inv.setInventorySlotContents(slot, item);
                 }
@@ -60,7 +58,7 @@ public class ShadowInventory implements CompatInventory {
                 return itemstack1;
             }
         } else {
-            return ItemStackTools.getEmptyStack();
+            return ItemStack.EMPTY;
         }
     }
 
@@ -80,10 +78,13 @@ public class ShadowInventory implements CompatInventory {
     }
 
     @Override
-    public boolean isUsable(EntityPlayer player) {
-        // @todo @@@@@@@@@
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
-//        return master.isUsable(player);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class ShadowInventory implements CompatInventory {
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = items[index];
-        items[index] = ItemStackTools.getEmptyStack();
+        items[index] = ItemStack.EMPTY;
         return stack;
     }
 

@@ -3,7 +3,6 @@ package mcjty.gearswap.blocks;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import mcjty.gearswap.GearSwap;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
@@ -36,7 +35,7 @@ public class GhostSlot extends Slot {
 
     @Override
     public ItemStack decrStackSize(int amount) {
-        return ItemStackTools.getEmptyStack();
+        return ItemStack.EMPTY;
     }
 
     @Override

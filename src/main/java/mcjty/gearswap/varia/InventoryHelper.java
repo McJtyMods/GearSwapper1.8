@@ -1,6 +1,5 @@
 package mcjty.gearswap.varia;
 
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -34,14 +33,14 @@ public class InventoryHelper {
         int k = start;
 
         ItemStack itemstack1;
-        int itemsToPlace = ItemStackTools.getStackSize(result);
+        int itemsToPlace = result.getCount();
 
         if (result.isStackable()) {
             while (itemsToPlace > 0 && (k < stop)) {
                 itemstack1 = inventory.getStackInSlot(k);
 
                 if (isItemStackConsideredEqual(result, itemstack1) && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
-                    int l = ItemStackTools.getStackSize(itemstack1) + itemsToPlace;
+                    int l = itemstack1.getCount() + itemsToPlace;
 
                     if (l <= result.getMaxStackSize()) {
                         if (undo != null) {
@@ -51,16 +50,31 @@ public class InventoryHelper {
                             }
                         }
                         itemsToPlace = 0;
-                        ItemStackTools.setStackSize(itemstack1, l);
+                        ItemStack result1;
+                        if (l <= 0) {
+                            itemstack1.setCount(0);
+                            result1 = ItemStack.EMPTY;
+                        } else {
+                            itemstack1.setCount(l);
+                            result1 = itemstack1;
+                        }
                         inventory.markDirty();
-                    } else if (ItemStackTools.getStackSize(itemstack1) < result.getMaxStackSize()) {
+                    } else if (itemstack1.getCount() < result.getMaxStackSize()) {
                         if (undo != null) {
                             if (!undo.containsKey(k)) {
                                 undo.put(k, itemstack1.copy());
                             }
                         }
-                        itemsToPlace -= result.getMaxStackSize() - ItemStackTools.getStackSize(itemstack1);
-                        ItemStackTools.setStackSize(itemstack1, result.getMaxStackSize());
+                        itemsToPlace -= result.getMaxStackSize() - itemstack1.getCount();
+                        int amount = result.getMaxStackSize();
+                        ItemStack result1;
+                        if (amount <= 0) {
+                            itemstack1.setCount(0);
+                            result1 = ItemStack.EMPTY;
+                        } else {
+                            itemstack1.setCount(amount);
+                            result1 = itemstack1;
+                        }
                         inventory.markDirty();
                     }
                 }
@@ -75,14 +89,21 @@ public class InventoryHelper {
             while (k < stop) {
                 itemstack1 = inventory.getStackInSlot(k);
 
-                if (ItemStackTools.isEmpty(itemstack1) && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
+                if (itemstack1.isEmpty() && (sidedInventory == null || sidedInventory.canInsertItem(k, result, side))) {
                     if (undo != null) {
                         if (!undo.containsKey(k)) {
-                            undo.put(k, ItemStackTools.getEmptyStack());
+                            undo.put(k, ItemStack.EMPTY);
                         }
                     }
                     ItemStack copy = result.copy();
-                    ItemStackTools.setStackSize(copy, itemsToPlace);
+                    ItemStack result1;
+                    if (itemsToPlace <= 0) {
+                        copy.setCount(0);
+                        result1 = ItemStack.EMPTY;
+                    } else {
+                        copy.setCount(itemsToPlace);
+                        result1 = copy;
+                    }
                     inventory.setInventorySlotContents(k, copy);
                     inventory.markDirty();
                     itemsToPlace = 0;
@@ -97,6 +118,6 @@ public class InventoryHelper {
     }
 
     private static boolean isItemStackConsideredEqual(ItemStack result, ItemStack itemstack1) {
-        return ItemStackTools.isValid(itemstack1) && itemstack1.getItem() == result.getItem() && (!result.getHasSubtypes() || result.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(result, itemstack1);
+        return !itemstack1.isEmpty() && itemstack1.getItem() == result.getItem() && (!result.getHasSubtypes() || result.getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(result, itemstack1);
     }
 }

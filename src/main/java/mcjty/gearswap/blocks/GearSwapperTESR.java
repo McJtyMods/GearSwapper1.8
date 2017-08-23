@@ -1,7 +1,6 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.GearSwap;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -124,7 +123,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
 
         for (int i = 0 ; i < 4 ; i++) {
             ItemStack stack = gearSwapperTE.getStackInSlot(i);
-            if (ItemStackTools.isValid(stack)) {
+            if (!stack.isEmpty()) {
                 itemRender.renderItemAndEffectIntoGUI(stack, xx[i], yy[i]);
             }
         }

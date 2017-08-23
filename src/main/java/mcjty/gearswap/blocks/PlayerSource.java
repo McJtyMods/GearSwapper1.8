@@ -1,6 +1,5 @@
 package mcjty.gearswap.blocks;
 
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -26,10 +25,10 @@ class PlayerSource implements Source {
     @Override
     public ItemStack extractAmount(int index, int amount) {
         ItemStack current = inventoryPlayer.getStackInSlot(index + 9);
-        if (amount < ItemStackTools.getStackSize(current)) {
+        if (amount < current.getCount()) {
             current = inventoryPlayer.decrStackSize(index + 9, amount);
         } else {
-            inventoryPlayer.setInventorySlotContents(index + 9, ItemStackTools.getEmptyStack());
+            inventoryPlayer.setInventorySlotContents(index + 9, ItemStack.EMPTY);
         }
         return current;
     }

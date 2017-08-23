@@ -1,13 +1,13 @@
 package baubles.api.inv;
 
 import baubles.api.cap.IBaublesItemHandler;
-import mcjty.lib.compat.CompatInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
-public class BaublesInventoryWrapper implements CompatInventory {
+public class BaublesInventoryWrapper implements IInventory {
 	
 	final IBaublesItemHandler handler;	
 
@@ -67,7 +67,12 @@ public class BaublesInventoryWrapper implements CompatInventory {
 	public void markDirty() {	}
 
 	@Override
-	public boolean isUsable(EntityPlayer player) {
+	public boolean isEmpty() {
+		return false;
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
