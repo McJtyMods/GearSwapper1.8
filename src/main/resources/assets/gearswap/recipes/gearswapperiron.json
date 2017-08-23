@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "gearswap:gearswapperiron"
+  },
+  "pattern": [
+    "pCp",
+    "pcp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  }
+}

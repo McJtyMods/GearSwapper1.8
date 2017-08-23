@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "gearswap:gearswapperstone"
+  },
+  "pattern": [
+    "pCp",
+    "pcp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:stone",
+      "data": 0
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  }
+}

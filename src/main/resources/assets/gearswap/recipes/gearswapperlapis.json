@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "gearswap:gearswapperlapis"
+  },
+  "pattern": [
+    "pCp",
+    "pcp",
+    "ppp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "dyeBlue"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  }
+}

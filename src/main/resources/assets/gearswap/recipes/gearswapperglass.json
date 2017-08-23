@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "gearswap:gearswapperglass"
+  },
+  "pattern": [
+    "pCp",
+    "pcp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:glass"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  }
+}

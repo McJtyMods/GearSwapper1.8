@@ -3,7 +3,6 @@ package mcjty.gearswap.proxy;
 import mcjty.gearswap.Config;
 import mcjty.gearswap.ForgeEventHandlers;
 import mcjty.gearswap.GearSwap;
-import mcjty.gearswap.ModCrafting;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.network.PacketHandler;
@@ -56,8 +55,6 @@ public abstract class CommonProxy {
             mainConfig.save();
         }
         mainConfig = null;
-
-        ModCrafting.init();
     }
 
 }
