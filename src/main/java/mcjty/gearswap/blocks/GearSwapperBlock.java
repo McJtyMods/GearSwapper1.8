@@ -3,7 +3,7 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.compat.top.TOPInfoProvider;
 import mcjty.gearswap.compat.waila.WailaInfoProvider;
-import mcjty.gearswap.network.PacketHandler;
+import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -130,7 +130,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
             RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
             int index = getSlot(mouseOver, world);
             if (index >= 0) {
-                PacketHandler.INSTANCE.sendToServer(new PacketRememberSetup(pos, index));
+                GearSwapPacketHandler.INSTANCE.sendToServer(new PacketRememberSetup(pos, index));
             }
         }
     }

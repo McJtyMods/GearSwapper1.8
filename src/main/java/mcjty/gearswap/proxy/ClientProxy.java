@@ -5,6 +5,7 @@ import mcjty.gearswap.blocks.GearSwapperTE;
 import mcjty.gearswap.blocks.GearSwapperTESR;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
+import mcjty.lib.McJtyLibClient;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -25,6 +26,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         MinecraftForge.EVENT_BUS.register(this);
+        McJtyLibClient.preInit(e);
     }
 
     @Override

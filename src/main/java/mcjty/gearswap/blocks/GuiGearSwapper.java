@@ -1,7 +1,7 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.GearSwap;
-import mcjty.gearswap.network.PacketHandler;
+import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.gearswap.network.PacketToggleMode;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
@@ -64,7 +64,7 @@ public class GuiGearSwapper extends GuiContainer {
     }
 
     private void toggleMode(int i) {
-        PacketHandler.INSTANCE.sendToServer(new PacketToggleMode(gearSwapperTE.getPos(), i));
+        GearSwapPacketHandler.INSTANCE.sendToServer(new PacketToggleMode(gearSwapperTE.getPos(), i));
     }
 
     private void filledRect(int x1, int y1, int x2, int y2, int color) {
