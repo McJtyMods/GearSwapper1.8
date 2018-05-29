@@ -11,7 +11,7 @@ public class GearSwapPacketHandler {
         INSTANCE = network;
 
         // Server side
-        INSTANCE.registerMessage(PacketToggleMode.Handler.class, PacketToggleMode.class, PacketHandler.nextID(), Side.SERVER);
-        INSTANCE.registerMessage(PacketRememberSetup.Handler.class, PacketRememberSetup.class, PacketHandler.nextID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketToggleMode.Handler.class, PacketToggleMode.class, PacketHandler.nextPacketID(), Side.SERVER);
+        INSTANCE.registerMessage(PacketRememberSetup.Handler.class, PacketRememberSetup.class, PacketHandler.nextPacketID(), Side.SERVER);
     }
 }
