@@ -1,12 +1,19 @@
 package mcjty.gearswap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import mcjty.gearswap.blocks.GearSwapperTE;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
+import mcjty.lib.datafix.fixes.TileEntityNamespace;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.datafix.FixTypes;
+import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -14,6 +21,9 @@ public class ForgeEventHandlers {
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
+        ModFixs modFixs = FMLCommonHandler.instance().getDataFixer().init(GearSwap.MODID, 1);
+        Map<String, String> oldToNewIdMap = new HashMap<>();
+
         event.getRegistry().register(ModBlocks.glassGearSwapperBlock);
         event.getRegistry().register(ModBlocks.ironGearSwapperBlock);
         event.getRegistry().register(ModBlocks.lapisGearSwapperBlock);
@@ -22,7 +32,14 @@ public class ForgeEventHandlers {
         if (ModBlocks.moddedGearSwapperBlock != null) {
             event.getRegistry().register(ModBlocks.moddedGearSwapperBlock);
         }
-        GameRegistry.registerTileEntity(GearSwapperTE.class, GearSwap.MODID + "_gearSwapper");
+        GameRegistry.registerTileEntity(GearSwapperTE.class, GearSwap.MODID + ":gearswapper");
+
+        // We used to accidentally register TEs with names like "minecraft:gearswap_gearswapper" instead of "gearswap:gearswapper".
+        // Set up a DataFixer to map these incorrect names to the correct ones, so that we don't break old saved games.
+        // @todo Remove all this if we ever break saved-game compatibility.
+        oldToNewIdMap.put(GearSwap.MODID + "_gearSwapper", GearSwap.MODID + ":gearswapper");
+        oldToNewIdMap.put("minecraft:" + GearSwap.MODID + "_gearswapper", GearSwap.MODID + ":gearswapper");
+        modFixs.registerFix(FixTypes.BLOCK_ENTITY, new TileEntityNamespace(oldToNewIdMap, 1));
     }
 
     @SubscribeEvent
