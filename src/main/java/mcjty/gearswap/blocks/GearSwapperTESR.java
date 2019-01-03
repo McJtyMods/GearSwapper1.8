@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -121,7 +122,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
 
         RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
-        for (int i = 0 ; i < 4 ; i++) {
+        for (int i = 0; i < 4; i++) {
             ItemStack stack = gearSwapperTE.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 itemRender.renderItemAndEffectIntoGUI(stack, xx[i], yy[i]);
@@ -131,4 +132,7 @@ public class GearSwapperTESR extends TileEntitySpecialRenderer {
         RenderHelper.enableStandardItemLighting();
     }
 
+    public static void register() {
+        ClientRegistry.bindTileEntitySpecialRenderer(GearSwapperTE.class, new GearSwapperTESR());
+    }
 }
