@@ -74,7 +74,7 @@ public class GearSwap implements ModBase {
     public void postInit(FMLPostInitializationEvent e) {
         proxy.postInit(e);
 
-        baubles = Loader.isModLoaded("Baubles");
+        baubles = Loader.isModLoaded("baubles");
         if (baubles) {
             if (Config.supportBaubles) {
                 logger.log(Level.INFO, "Gear Swapper Detected Baubles: enabling support");
