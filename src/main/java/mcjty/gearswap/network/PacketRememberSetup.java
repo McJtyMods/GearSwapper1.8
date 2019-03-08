@@ -2,6 +2,7 @@ package mcjty.gearswap.network;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.gearswap.blocks.GearSwapperTE;
+import mcjty.lib.thirteen.Context;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
@@ -9,10 +10,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.util.function.Supplier;
 
 public class PacketRememberSetup implements IMessage {
     private BlockPos pos;
@@ -36,24 +36,23 @@ public class PacketRememberSetup implements IMessage {
     public PacketRememberSetup() {
     }
 
+    public PacketRememberSetup(ByteBuf buf) {
+        fromBytes(buf);
+    }
+
     public PacketRememberSetup(BlockPos pos, int index) {
         this.pos = pos;
         this.index = index;
     }
 
-    public static class Handler implements IMessageHandler<PacketRememberSetup, IMessage> {
-        @Override
-        public IMessage onMessage(PacketRememberSetup message, MessageContext ctx) {
-            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
-            return null;
-        }
-
-        private void handle(PacketRememberSetup message, MessageContext ctx) {
-            EntityPlayerMP playerEntity = ctx.getServerHandler().player;
-            TileEntity te = playerEntity.getEntityWorld().getTileEntity(message.pos);
+    public void handle(Supplier<Context> supplier) {
+        Context ctx = supplier.get();
+        ctx.enqueueWork(() -> {
+            EntityPlayerMP playerEntity = ctx.getSender();
+            TileEntity te = playerEntity.getEntityWorld().getTileEntity(pos);
             if (te instanceof GearSwapperTE) {
                 GearSwapperTE gearSwapperTE = (GearSwapperTE) te;
-                gearSwapperTE.rememberSetup(message.index, playerEntity);
+                gearSwapperTE.rememberSetup(index, playerEntity);
                 ITextComponent component = new TextComponentString(TextFormatting.YELLOW + "Remembered current hotbar and armor");
                 if (playerEntity instanceof EntityPlayer) {
                     ((EntityPlayer) playerEntity).sendStatusMessage(component, false);
@@ -61,6 +60,7 @@ public class PacketRememberSetup implements IMessage {
                     playerEntity.sendMessage(component);
                 }
             }
-        }
+        });
+        ctx.setPacketHandled(true);
     }
 }

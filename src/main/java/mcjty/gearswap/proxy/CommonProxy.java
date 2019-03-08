@@ -7,14 +7,12 @@ import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.lib.McJtyLib;
-import mcjty.lib.network.PacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import org.apache.logging.log4j.Level;
 
 public abstract class CommonProxy {
@@ -31,8 +29,7 @@ public abstract class CommonProxy {
         ModBlocks.init();
         ModItems.init();
 
-        SimpleNetworkWrapper network = PacketHandler.registerMessages(GearSwap.MODID, "gearswapper");
-        GearSwapPacketHandler.registerMessages(network);
+        GearSwapPacketHandler.registerMessages("gearswapper");
     }
 
     private void readMainConfig() {
