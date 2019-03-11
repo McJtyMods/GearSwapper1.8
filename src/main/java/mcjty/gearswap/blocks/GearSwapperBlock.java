@@ -1,11 +1,11 @@
 package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.GearSwap;
-import mcjty.gearswap.compat.top.TOPInfoProvider;
-import mcjty.gearswap.compat.waila.WailaInfoProvider;
 import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
 import mcjty.gearswap.setup.GuiProxy;
+import mcjty.lib.compat.theoneprobe.TOPInfoProvider;
+import mcjty.lib.compat.waila.WailaInfoProvider;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
