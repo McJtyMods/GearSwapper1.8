@@ -1,6 +1,6 @@
 package mcjty.gearswap;
 
-import mcjty.gearswap.setup.CommonSetup;
+import mcjty.gearswap.setup.ModSetup;
 import mcjty.lib.base.ModBase;
 import mcjty.lib.proxy.IProxy;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +25,7 @@ public class GearSwap implements ModBase {
 
     @SidedProxy(clientSide="mcjty.gearswap.setup.ClientProxy", serverSide="mcjty.gearswap.setup.ServerProxy")
     public static IProxy proxy;
-    public static CommonSetup setup = new CommonSetup();
+    public static ModSetup setup = new ModSetup();
 
     @Mod.Instance("gearswap")
     public static GearSwap instance;

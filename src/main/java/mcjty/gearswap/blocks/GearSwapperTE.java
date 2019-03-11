@@ -2,7 +2,7 @@ package mcjty.gearswap.blocks;
 
 import mcjty.gearswap.ConfigSetup;
 import mcjty.gearswap.items.ModItems;
-import mcjty.gearswap.setup.CommonSetup;
+import mcjty.gearswap.setup.ModSetup;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.ItemStackList;
 import mcjty.gearswap.varia.Tools;
@@ -122,7 +122,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     // Get total player inventory count. This is 9+4+1 (hotbar+armor+shield) without baubles
     // and 9+4+1+4 with baubles.
     private int getPlayerInventorySize() {
-        if (CommonSetup.baubles) {
+        if (ModSetup.baubles) {
             return 9+4+1+4;
         } else {
             return 9+4+1;
@@ -143,7 +143,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     private ItemStack getStackFromPlayerInventory(int index, EntityPlayer player) {
         if (index < 9+4+1) {
             return player.inventory.getStackInSlot(getInventoryIndex(index));
-        } else if (CommonSetup.baubles) {
+        } else if (ModSetup.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
                 return baubles.getStackInSlot(index - (9+4+1));
@@ -155,7 +155,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     private void putStackInPlayerInventory(int index, EntityPlayer player, ItemStack stack) {
         if (index < 9+4+1) {
             player.inventory.setInventorySlotContents(getInventoryIndex(index), stack);
-        } else if (CommonSetup.baubles) {
+        } else if (ModSetup.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
                 baubles.setInventorySlotContents(index - (9+4+1), stack);
@@ -483,7 +483,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     public boolean isGhostSlot(int index) {
-        return (index >= 0 && index < SLOT_BUFFER) || (CommonSetup.baubles && index >= SLOT_BAUBLES && index < SLOT_BAUBLES+16);
+        return (index >= 0 && index < SLOT_BUFFER) || (ModSetup.baubles && index >= SLOT_BAUBLES && index < SLOT_BAUBLES+16);
     }
 
     public boolean isIconSlot(int index) {

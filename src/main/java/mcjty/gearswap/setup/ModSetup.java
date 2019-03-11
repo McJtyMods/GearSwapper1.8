@@ -6,14 +6,14 @@ import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.compat.MainCompatHandler;
 import mcjty.gearswap.items.ModItems;
 import mcjty.gearswap.network.GearSwapPacketHandler;
-import mcjty.lib.setup.DefaultCommonSetup;
+import mcjty.lib.setup.DefaultModSetup;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Level;
 
-public class CommonSetup extends DefaultCommonSetup {
+public class ModSetup extends DefaultModSetup {
 
     public static boolean baubles = false;
 

@@ -3,7 +3,7 @@ package mcjty.gearswap.blocks;
 import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.gearswap.network.PacketToggleMode;
-import mcjty.gearswap.setup.CommonSetup;
+import mcjty.gearswap.setup.ModSetup;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
@@ -81,7 +81,7 @@ public class GuiGearSwapper extends GuiContainer {
         drawModes();
 
         // If needed hide the bauble slots
-        if (!CommonSetup.baubles) {
+        if (!ModSetup.baubles) {
             filledRect(27, 62, 27 + 18, 62 + 18 * 4, 0xffc6c6c6);
             filledRect(86, 5, 86 + 18 * 4, 5 + 18, 0xffc6c6c6);
             filledRect(86, 5 + 39, 86 + 18 * 4, 5 + 39 + 18, 0xffc6c6c6);
