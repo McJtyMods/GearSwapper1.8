@@ -5,6 +5,7 @@ import mcjty.gearswap.compat.top.TOPInfoProvider;
 import mcjty.gearswap.compat.waila.WailaInfoProvider;
 import mcjty.gearswap.network.GearSwapPacketHandler;
 import mcjty.gearswap.network.PacketRememberSetup;
+import mcjty.gearswap.setup.GuiProxy;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -146,7 +147,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
                     int index = calculateHitIndex(sx, sy, sz, k);
 
                     if (index == -1) {
-                        player.openGui(GearSwap.instance, GearSwap.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());
+                        player.openGui(GearSwap.instance, GuiProxy.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());
                         return true;
                     }
 
@@ -159,7 +160,7 @@ public class GearSwapperBlock extends Block implements ITileEntityProvider, Wail
                     }
                 }
             } else {
-                player.openGui(GearSwap.instance, GearSwap.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(GearSwap.instance, GuiProxy.GUI_GEARSWAP, world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;

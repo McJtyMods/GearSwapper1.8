@@ -1,10 +1,11 @@
-package mcjty.gearswap.proxy;
+package mcjty.gearswap.setup;
 
-import mcjty.gearswap.Config;
+import mcjty.gearswap.ConfigSetup;
 import mcjty.gearswap.blocks.GearSwapperTESR;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
 import mcjty.lib.McJtyLibClient;
+import mcjty.lib.setup.DefaultClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends DefaultClientProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent e) {
@@ -47,8 +48,8 @@ public class ClientProxy extends CommonProxy {
         ModBlocks.woodenGearSwapperBlock.initModel();
         ModItems.forceEmptyItem.initModel();
 
-        if (!Config.customBlockName.isEmpty()) {
-            Block b = Block.REGISTRY.getObject(new ResourceLocation(Config.customBlockName));
+        if (!ConfigSetup.customBlockName.isEmpty()) {
+            Block b = Block.REGISTRY.getObject(new ResourceLocation(ConfigSetup.customBlockName));
             if (b != null) {
                 ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
                 mesher.register(Item.getItemFromBlock(ModBlocks.moddedGearSwapperBlock), 0, new ModelResourceLocation(b.getRegistryName(), "inventory"));
@@ -57,5 +58,4 @@ public class ClientProxy extends CommonProxy {
 
         GearSwapperTESR.register();
     }
-
 }

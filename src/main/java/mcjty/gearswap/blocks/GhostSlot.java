@@ -2,7 +2,7 @@ package mcjty.gearswap.blocks;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import mcjty.gearswap.GearSwap;
+import mcjty.gearswap.setup.CommonSetup;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
@@ -56,7 +56,7 @@ public class GhostSlot extends Slot {
                 default: slot = null;
             }
             return item != null && item.isValidArmor(stack, slot, null);
-        } else if (GearSwap.baubles && type >= BAUBLE_RING && type <= BAUBLE_BELT) {
+        } else if (CommonSetup.baubles && type >= BAUBLE_RING && type <= BAUBLE_BELT) {
             if (item == null) {
                 return false;
             }

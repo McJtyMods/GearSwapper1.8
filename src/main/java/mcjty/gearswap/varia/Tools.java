@@ -1,7 +1,7 @@
 package mcjty.gearswap.varia;
 
 import baubles.api.BaublesApi;
-import mcjty.gearswap.GearSwap;
+import mcjty.gearswap.setup.CommonSetup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -44,6 +44,6 @@ public class Tools {
      * Wrap it in a ShadowInventory if you need to.
      */
     public static IInventory getBaubles(EntityPlayer player) {
-        return GearSwap.baubles ? BaublesApi.getBaubles(player) : null;
+        return CommonSetup.baubles ? BaublesApi.getBaubles(player) : null;
     }
 }

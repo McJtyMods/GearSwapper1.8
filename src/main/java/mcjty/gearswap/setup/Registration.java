@@ -1,8 +1,7 @@
-package mcjty.gearswap;
+package mcjty.gearswap.setup;
 
-import java.util.HashMap;
-import java.util.Map;
 
+import mcjty.gearswap.GearSwap;
 import mcjty.gearswap.blocks.GearSwapperTE;
 import mcjty.gearswap.blocks.ModBlocks;
 import mcjty.gearswap.items.ModItems;
@@ -14,13 +13,18 @@ import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class ForgeEventHandlers {
+import java.util.HashMap;
+import java.util.Map;
+
+@Mod.EventBusSubscriber
+public class Registration {
 
     @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
         ModFixs modFixs = FMLCommonHandler.instance().getDataFixer().init(GearSwap.MODID, 1);
         Map<String, String> oldToNewIdMap = new HashMap<>();
 
@@ -43,7 +47,7 @@ public class ForgeEventHandlers {
     }
 
     @SubscribeEvent
-    public void registerItems(RegistryEvent.Register<Item> event) {
+    public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().register(ModItems.forceEmptyItem);
 
         event.getRegistry().register(new ItemBlock(ModBlocks.glassGearSwapperBlock).setRegistryName(ModBlocks.glassGearSwapperBlock.getRegistryName()));

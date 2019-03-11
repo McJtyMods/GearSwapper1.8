@@ -1,20 +1,15 @@
 package mcjty.gearswap;
 
-import mcjty.gearswap.compat.MainCompatHandler;
-import mcjty.gearswap.proxy.CommonProxy;
+import mcjty.gearswap.setup.CommonSetup;
 import mcjty.lib.base.ModBase;
+import mcjty.lib.proxy.IProxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
-
-import java.io.File;
 
 @Mod(modid = GearSwap.MODID, name="Gear Swapper",
         dependencies =
@@ -28,61 +23,30 @@ public class GearSwap implements ModBase {
     public static final String MIN_FORGE11_VER = "13.19.0.2176";
     public static final String MIN_MCJTYLIB_VER = "3.1.0";
 
-    @SidedProxy(clientSide="mcjty.gearswap.proxy.ClientProxy", serverSide="mcjty.gearswap.proxy.ServerProxy")
-    public static CommonProxy proxy;
+    @SidedProxy(clientSide="mcjty.gearswap.setup.ClientProxy", serverSide="mcjty.gearswap.setup.ServerProxy")
+    public static IProxy proxy;
+    public static CommonSetup setup = new CommonSetup();
 
     @Mod.Instance("gearswap")
     public static GearSwap instance;
-    public static Logger logger;
-    public static File mainConfigDir;
-    public static File modConfigDir;
     public static Configuration config;
 
-    public static int GUI_GEARSWAP = 0;
-
-    public static boolean baubles = false;
-
-
-    /**
-     * Run before anything else. Read your config, create blocks, items, etc, and
-     * register them with the GameRegistry.
-     */
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent e) {
-        logger = e.getModLog();
-        mainConfigDir = e.getModConfigurationDirectory();
-        modConfigDir = new File(mainConfigDir.getPath());
-        config = new Configuration(new File(modConfigDir, "gearswap.cfg"));
+        setup.preInit(e);
         proxy.preInit(e);
-
-        MainCompatHandler.registerWaila();
-        MainCompatHandler.registerTOP();
     }
 
-    /**
-     * Do your mod setup. Build whatever data structures you care about. Register recipes.
-     */
     @Mod.EventHandler
     public void init(FMLInitializationEvent e) {
+        setup.init(e);
         proxy.init(e);
     }
 
-    /**
-     * Handle interaction with other mods, complete your setup based on this.
-     */
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
+        setup.postInit(e);
         proxy.postInit(e);
-
-        baubles = Loader.isModLoaded("baubles");
-        if (baubles) {
-            if (Config.supportBaubles) {
-                logger.log(Level.INFO, "Gear Swapper Detected Baubles: enabling support");
-            } else {
-                logger.log(Level.INFO, "Gear Swapper Detected Baubles but it is disabled in config anyway: disabling support");
-                baubles = false;
-            }
-        }
     }
 
     @Override

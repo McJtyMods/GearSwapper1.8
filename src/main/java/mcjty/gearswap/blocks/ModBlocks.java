@@ -1,10 +1,9 @@
 package mcjty.gearswap.blocks;
 
-import mcjty.gearswap.Config;
+import mcjty.gearswap.ConfigSetup;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
     public static final String GEAR_SWAPPER_WOOD = "gearswapperwood";
@@ -27,8 +26,8 @@ public class ModBlocks {
         stoneGearSwapperBlock = new GearSwapperBlock(Material.ROCK, GEAR_SWAPPER_STONE);
         glassGearSwapperBlock = new GearSwapperGlassBlock(Material.GLASS, GEAR_SWAPPER_GLASS);
 
-        if (!Config.customBlockName.isEmpty()) {
-            Block b = Block.REGISTRY.getObject(new ResourceLocation(Config.customBlockName));
+        if (!ConfigSetup.customBlockName.isEmpty()) {
+            Block b = Block.REGISTRY.getObject(new ResourceLocation(ConfigSetup.customBlockName));
             if (b != null) {
                 moddedGearSwapperBlock = new GearSwapperBlock(Material.ROCK, "gearSwapperModded");
             }

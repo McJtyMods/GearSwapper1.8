@@ -1,8 +1,8 @@
 package mcjty.gearswap.blocks;
 
-import mcjty.gearswap.Config;
-import mcjty.gearswap.GearSwap;
+import mcjty.gearswap.ConfigSetup;
 import mcjty.gearswap.items.ModItems;
+import mcjty.gearswap.setup.CommonSetup;
 import mcjty.gearswap.varia.InventoryHelper;
 import mcjty.gearswap.varia.ItemStackList;
 import mcjty.gearswap.varia.Tools;
@@ -122,7 +122,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     // Get total player inventory count. This is 9+4+1 (hotbar+armor+shield) without baubles
     // and 9+4+1+4 with baubles.
     private int getPlayerInventorySize() {
-        if (GearSwap.baubles) {
+        if (CommonSetup.baubles) {
             return 9+4+1+4;
         } else {
             return 9+4+1;
@@ -143,7 +143,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     private ItemStack getStackFromPlayerInventory(int index, EntityPlayer player) {
         if (index < 9+4+1) {
             return player.inventory.getStackInSlot(getInventoryIndex(index));
-        } else if (GearSwap.baubles) {
+        } else if (CommonSetup.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
                 return baubles.getStackInSlot(index - (9+4+1));
@@ -155,7 +155,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     private void putStackInPlayerInventory(int index, EntityPlayer player, ItemStack stack) {
         if (index < 9+4+1) {
             player.inventory.setInventorySlotContents(getInventoryIndex(index), stack);
-        } else if (GearSwap.baubles) {
+        } else if (CommonSetup.baubles) {
             IInventory baubles = Tools.getBaubles(player);
             if (baubles != null) {
                 baubles.setInventorySlotContents(index - (9+4+1), stack);
@@ -424,8 +424,8 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     private boolean itemsMatchForSpecificTags(ItemStack desired, ItemStack current) {
-        if (Config.tagsThatHaveToMatch.containsKey(desired.getUnlocalizedName())) {
-            String[] tags = Config.tagsThatHaveToMatch.get(desired.getUnlocalizedName());
+        if (ConfigSetup.tagsThatHaveToMatch.containsKey(desired.getUnlocalizedName())) {
+            String[] tags = ConfigSetup.tagsThatHaveToMatch.get(desired.getUnlocalizedName());
             boolean ok = true;
             for (String tag : tags) {
                 NBTBase tag1 = desired.getTagCompound().getTag(tag);
@@ -483,7 +483,7 @@ public class GearSwapperTE extends TileEntity implements ISidedInventory {
     }
 
     public boolean isGhostSlot(int index) {
-        return (index >= 0 && index < SLOT_BUFFER) || (GearSwap.baubles && index >= SLOT_BAUBLES && index < SLOT_BAUBLES+16);
+        return (index >= 0 && index < SLOT_BUFFER) || (CommonSetup.baubles && index >= SLOT_BAUBLES && index < SLOT_BAUBLES+16);
     }
 
     public boolean isIconSlot(int index) {
