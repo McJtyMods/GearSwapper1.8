@@ -23,8 +23,6 @@ public class ModSetup extends DefaultModSetup {
 
         NetworkRegistry.INSTANCE.registerGuiHandler(GearSwap.instance, new GuiProxy());
 
-        ConfigSetup.init();
-
         GearSwapPacketHandler.registerMessages("gearswapper");
 
         ModBlocks.init();
@@ -45,6 +43,11 @@ public class ModSetup extends DefaultModSetup {
                 baubles = false;
             }
         }
+    }
+
+    @Override
+    protected void setupConfig() {
+        ConfigSetup.init();
     }
 
     @Override
