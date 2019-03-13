@@ -23,9 +23,10 @@ public class ModSetup extends DefaultModSetup {
 
         NetworkRegistry.INSTANCE.registerGuiHandler(GearSwap.instance, new GuiProxy());
 
+        ConfigSetup.init();
+
         GearSwapPacketHandler.registerMessages("gearswapper");
 
-        ConfigSetup.init();
         ModBlocks.init();
         ModItems.init();
     }
